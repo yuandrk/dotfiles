@@ -1,0 +1,165 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                         BASH & KUBERNETES CHEATSHEET                          ║
+║                              yuandrk@fedora                                   ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ NAVIGATION & FILES                                                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ ..              cd ..                    la              ls -lhA (+ hidden) │
+│ ...             cd ../..                 path            Show PATH nicely   │
+│ ....            cd ../../..              now             Current time       │
+│ ll              ls -lh detailed          nowdate         Current date       │
+│                                                                             │
+│ mkcd <dir>      Create dir and cd        extract <file>  Auto-extract       │
+│ ff <pattern>    Find files               fd <pattern>    Find directories   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ GIT                                                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ gs              git status               gp              git push           │
+│ ga              git add                  gl              git log --graph    │
+│ gc              git commit               gd              git diff           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ KUBERNETES - GET RESOURCES                                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ k               kubectl                  kga             kubectl get all    │
+│ kgp             get pods                 kgpa            get pods --all-ns  │
+│ kgs             get services             kgc             get contexts       │
+│ kgd             get deployments          kcc             current context    │
+│ kgn             get nodes                                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ KUBERNETES - OPERATIONS                                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ kl <pod>        logs                     kap <file>      apply -f           │
+│ klf <pod>       logs -f (follow)         kdel <res>      delete resource    │
+│ kdp <pod>       describe pod             kdelp <pod>     delete pod         │
+│ kds <svc>       describe service         kctx            switch context     │
+│ kdd <dep>       describe deployment      kns             switch namespace   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ KUBERNETES - HELPER FUNCTIONS                                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ kshell <pod> [container]     Open shell in pod                             │
+│ kbash <pod> [container]      Open bash in pod                              │
+│ kgpw <pattern>               Find pods by name                             │
+│ kwp                          Watch pods (refresh 2s)                       │
+│ kevents                      Get events sorted by time                     │
+│ kpf <pod> <port>             Port forward to pod                           │
+│ ktop [pods|nodes]            Resource usage                                │
+│ krestart <deployment>        Restart deployment                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ KIND - LOCAL KUBERNETES                                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ kind-new <name>              Create cluster                                │
+│ kind-multi [name]            Create multi-node (1 cp + 2 workers)          │
+│ kind-with-ports [name]       Create with ports (80, 443, 30000)            │
+│ kind-list                    List all clusters                             │
+│ kind-clean                   Delete ALL clusters                           │
+│ kind-use <name>              Switch to cluster context                     │
+│ kind-img <image> [cluster]   Load Docker image into cluster                │
+│ kind-nodes [cluster]         Show nodes in cluster                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ K9S - TERMINAL UI                                                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ k9s                          Launch k9s                                     │
+│ k9s -n <namespace>           Launch in namespace                           │
+│                                                                             │
+│ Inside k9s:                                                                 │
+│   :          Command mode        0          Show pods                      │
+│   /          Filter              d          Describe                       │
+│   ?          Help                l          Logs                           │
+│   Ctrl+a     All namespaces      Ctrl+d     Delete                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ COMMON WORKFLOWS                                                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ LEARNING K8S:                                                               │
+│   kind-new learning          # Create cluster                              │
+│   k create deployment nginx --image=nginx                                   │
+│   k expose deployment nginx --port=80                                       │
+│   kgp                        # Check pods                                   │
+│   k9s                        # Visual exploration                           │
+│   kind delete cluster --name learning                                       │
+│                                                                             │
+│ TESTING MANIFESTS:                                                          │
+│   kind-new test              # Create test cluster                         │
+│   k apply -f deployment.yaml                                                │
+│   kgp                        # Check status                                 │
+│   klf <pod>                  # Check logs                                   │
+│   kshell <pod>               # Debug inside pod                             │
+│   kind delete cluster --name test                                           │
+│                                                                             │
+│ CUSTOM IMAGES:                                                              │
+│   docker build -t my-app:v1 .                                               │
+│   kind-new dev                                                              │
+│   kind-img my-app:v1 dev                                                    │
+│   k create deployment my-app --image=my-app:v1                              │
+│   kgp                                                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ USEFUL ONE-LINERS                                                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ k get pods --sort-by='.status.containerStatuses[0].restartCount'           │
+│ k top pods --sort-by=cpu                                                    │
+│ k top pods --sort-by=memory                                                 │
+│ k get events --field-selector involvedObject.name=<pod>                    │
+│ k get pods -o wide           # Show which node                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TROUBLESHOOTING                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ source ~/.bashrc             Reload bash config                            │
+│ kctx                         Check/switch context                          │
+│ kgc                          List all contexts                             │
+│ docker ps                    Check running containers                      │
+│ kind get clusters            List kind clusters                            │
+│ k cluster-info               Check cluster connection                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ FILE LOCATIONS                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ ~/.bashrc                                Main bash config                  │
+│ ~/.config/starship.toml                  Starship prompt config            │
+│ ~/.config/kind/*.yaml                    kind cluster templates            │
+│ ~/docs/setup/SYSTEM_SETUP.md             Complete documentation            │
+│ ~/docs/setup/QUICK_REFERENCE.md          Detailed command reference        │
+│ ~/docs/setup/AGENT_CONTEXT.md            AI agent context                  │
+│ ~/.local/bin/                            All installed tools               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DOCUMENTATION                                                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ cat ~/docs/setup/QUICK_REFERENCE.md      Command reference                 │
+│ cat ~/docs/setup/SYSTEM_SETUP.md         Full setup docs                   │
+│ cat ~/.config/kind/README.md             kind examples                     │
+│                                                                             │
+│ External:                                                                   │
+│   https://kubernetes.io/docs/reference/kubectl/cheatsheet/                 │
+│   https://kind.sigs.k8s.io/                                                 │
+│   https://k9scli.io/                                                        │
+│   https://starship.rs/                                                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║ TIP: Your Starship prompt shows: git branch, k8s context, language versions  ║
+║      Use tab completion for kubectl - it's fully enabled!                    ║
+║      Test everything in kind before production!                              ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+Last Updated: 2025-11-08

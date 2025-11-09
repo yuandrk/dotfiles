@@ -1,0 +1,394 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# ============================================================================
+# BASH ENHANCEMENTS - Works on Linux & macOS
+# ============================================================================
+
+# --- History Settings ---
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+export HISTCONTROL=ignoredups:erasedups  # No duplicate entries
+shopt -s histappend                      # Append to history, don't overwrite
+export HISTTIMEFORMAT='%F %T '           # Add timestamps to history
+
+# --- Bash Options ---
+shopt -s checkwinsize   # Update LINES and COLUMNS after each command
+shopt -s cdspell        # Autocorrect typos in path names when using cd
+shopt -s dirspell       # Autocorrect directory names during completion
+shopt -s nocaseglob     # Case-insensitive globbing
+
+# --- Completion ---
+if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi
+
+# --- Colors ---
+export CLICOLOR=1
+export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+
+# Detect OS for platform-specific settings
+OS_TYPE="$(uname -s)"
+
+# --- Aliases ---
+# ls aliases (platform-aware)
+if [ "$OS_TYPE" = "Darwin" ]; then
+    # macOS
+    alias ls='ls -G'
+    alias ll='ls -lhG'
+    alias la='ls -lhAG'
+else
+    # Linux
+    alias ls='ls --color=auto'
+    alias ll='ls -lh --color=auto'
+    alias la='ls -lhA --color=auto'
+fi
+
+# grep with color
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# Common shortcuts
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+
+# Safety aliases
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias mkdir='mkdir -pv'
+
+# Utility aliases
+alias h='history'
+alias j='jobs -l'
+alias path='echo -e ${PATH//:/\\n}'
+alias now='date +"%T"'
+alias nowdate='date +"%Y-%m-%d"'
+
+# Git shortcuts
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git log --oneline --graph --decorate'
+alias gd='git diff'
+
+# --- Useful Functions ---
+
+# Create directory and cd into it
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Extract various archive types
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *)           echo "'$1' cannot be extracted" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# Find files by name
+ff() {
+    find . -type f -iname "*$1*"
+}
+
+# Find directories by name
+fd() {
+    find . -type d -iname "*$1*"
+}
+
+# --- Starship Prompt ---
+# Custom git-aware prompt (commented out in favor of Starship)
+# Uncomment below and comment out Starship if you want to use the basic prompt
+#
+# COLOR_RESET='\[\033[0m\]'
+# COLOR_USER='\[\033[01;32m\]'
+# COLOR_HOST='\[\033[01;34m\]'
+# COLOR_PATH='\[\033[01;33m\]'
+# COLOR_GIT='\[\033[01;36m\]'
+# COLOR_GIT_DIRTY='\[\033[01;31m\]'
+#
+# git_prompt() {
+#     if git rev-parse --git-dir > /dev/null 2>&1; then
+#         local branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+#         if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
+#             echo -e " ${COLOR_GIT_DIRTY}(${branch}*)${COLOR_RESET}"
+#         else
+#             echo -e " ${COLOR_GIT}(${branch})${COLOR_RESET}"
+#         fi
+#     fi
+# }
+#
+# PS1="${COLOR_USER}\u${COLOR_RESET}@${COLOR_HOST}\h${COLOR_RESET}:${COLOR_PATH}\w${COLOR_RESET}\$(git_prompt)\n\$ "
+
+# Initialize Starship prompt
+eval "$(starship init bash)"
+
+# ============================================================================
+# KUBERNETES (K8S) CONFIGURATION
+# ============================================================================
+
+# --- Kubectl Completion ---
+if command -v kubectl &> /dev/null; then
+    source <(kubectl completion bash)
+
+    # Enable kubectl alias completion
+    complete -o default -F __start_kubectl k
+fi
+
+# --- Kubernetes Aliases ---
+alias k='kubectl'
+alias kgp='kubectl get pods'
+alias kgs='kubectl get svc'
+alias kgd='kubectl get deployments'
+alias kgn='kubectl get nodes'
+alias kga='kubectl get all'
+alias kgpa='kubectl get pods --all-namespaces'
+alias kdp='kubectl describe pod'
+alias kds='kubectl describe svc'
+alias kdd='kubectl describe deployment'
+alias kdn='kubectl describe node'
+alias kdel='kubectl delete'
+alias kl='kubectl logs'
+alias klf='kubectl logs -f'
+alias kex='kubectl exec -it'
+alias kap='kubectl apply -f'
+alias kdelp='kubectl delete pod'
+
+# Context and namespace shortcuts
+alias kctx='kubectx'
+alias kns='kubens'
+alias kgc='kubectl config get-contexts'
+alias kcc='kubectl config current-context'
+
+# --- Kubernetes Functions ---
+
+# Quick pod shell access
+kshell() {
+    if [ -z "$1" ]; then
+        echo "Usage: kshell <pod-name> [container-name]"
+        return 1
+    fi
+    if [ -z "$2" ]; then
+        kubectl exec -it "$1" -- /bin/sh
+    else
+        kubectl exec -it "$1" -c "$2" -- /bin/sh
+    fi
+}
+
+# Quick bash access (for pods with bash)
+kbash() {
+    if [ -z "$1" ]; then
+        echo "Usage: kbash <pod-name> [container-name]"
+        return 1
+    fi
+    if [ -z "$2" ]; then
+        kubectl exec -it "$1" -- /bin/bash
+    else
+        kubectl exec -it "$1" -c "$2" -- /bin/bash
+    fi
+}
+
+# Get pod by partial name
+kgpw() {
+    kubectl get pods | grep -i "$1"
+}
+
+# Watch pods
+kwp() {
+    watch -n 2 kubectl get pods
+}
+
+# Get events sorted by time
+kevents() {
+    kubectl get events --sort-by='.lastTimestamp'
+}
+
+# Port forward with common pattern
+kpf() {
+    if [ -z "$1" ] || [ -z "$2" ]; then
+        echo "Usage: kpf <pod-name> <port>"
+        echo "Example: kpf my-pod 8080"
+        return 1
+    fi
+    kubectl port-forward "$1" "$2:$2"
+}
+
+# Get resource usage
+ktop() {
+    if [ "$1" = "pod" ] || [ "$1" = "pods" ]; then
+        kubectl top pods
+    elif [ "$1" = "node" ] || [ "$1" = "nodes" ]; then
+        kubectl top nodes
+    else
+        echo "Top pods:"
+        kubectl top pods 2>/dev/null
+        echo ""
+        echo "Top nodes:"
+        kubectl top nodes 2>/dev/null
+    fi
+}
+
+# Restart deployment
+krestart() {
+    if [ -z "$1" ]; then
+        echo "Usage: krestart <deployment-name>"
+        return 1
+    fi
+    kubectl rollout restart deployment "$1"
+}
+
+# --- K8s Context in Prompt (if not using Starship) ---
+# Starship shows k8s context automatically, but here's a manual version:
+# k8s_context() {
+#     if command -v kubectl &> /dev/null; then
+#         local ctx=$(kubectl config current-context 2>/dev/null)
+#         local ns=$(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)
+#         if [ -n "$ctx" ]; then
+#             echo -e " ⎈ ${ctx}${ns:+:$ns}"
+#         fi
+#     fi
+# }
+
+# ============================================================================
+# KIND (Kubernetes IN Docker) CONFIGURATION
+# ============================================================================
+
+# --- kind Aliases ---
+alias kind-create='kind create cluster'
+alias kind-delete='kind delete cluster'
+alias kind-list='kind get clusters'
+alias kind-load='kind load docker-image'
+
+# --- kind Helper Functions ---
+
+# Create a kind cluster with a custom name
+kind-new() {
+    local cluster_name="${1:-kind}"
+    echo "Creating kind cluster: $cluster_name"
+    kind create cluster --name "$cluster_name"
+}
+
+# Create a multi-node cluster
+kind-multi() {
+    local cluster_name="${1:-kind-multi}"
+    local config_file="/tmp/kind-multi-node.yaml"
+
+    cat > "$config_file" << 'EOF'
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+EOF
+
+    echo "Creating multi-node cluster: $cluster_name"
+    kind create cluster --name "$cluster_name" --config "$config_file"
+    rm "$config_file"
+}
+
+# Create cluster with port mapping (useful for testing services)
+kind-with-ports() {
+    local cluster_name="${1:-kind-ports}"
+    local config_file="/tmp/kind-ports.yaml"
+
+    cat > "$config_file" << 'EOF'
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+  - containerPort: 30000
+    hostPort: 30000
+    protocol: TCP
+EOF
+
+    echo "Creating cluster with port mappings: $cluster_name"
+    kind create cluster --name "$cluster_name" --config "$config_file"
+    rm "$config_file"
+}
+
+# Delete all kind clusters
+kind-clean() {
+    echo "Deleting all kind clusters..."
+    kind get clusters | xargs -I {} kind delete cluster --name {}
+}
+
+# Quick switch to kind cluster context
+kind-use() {
+    local cluster_name="${1:-kind}"
+    kubectl cluster-info --context "kind-${cluster_name}"
+    kubectl config use-context "kind-${cluster_name}"
+}
+
+# Load local Docker image into kind cluster
+kind-img() {
+    if [ -z "$1" ]; then
+        echo "Usage: kind-img <image-name> [cluster-name]"
+        echo "Example: kind-img my-app:latest"
+        return 1
+    fi
+    local image="$1"
+    local cluster="${2:-kind}"
+    echo "Loading image $image into cluster $cluster"
+    kind load docker-image "$image" --name "$cluster"
+}
+
+# Get nodes of a kind cluster
+kind-nodes() {
+    local cluster="${1:-kind}"
+    echo "Nodes for cluster: $cluster"
+    kubectl get nodes --context "kind-${cluster}"
+}
+
+# --- Editor ---
+export EDITOR=vim
+export VISUAL=vim
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+if [ -d ~/.bashrc.d ]; then
+    for rc in ~/.bashrc.d/*; do
+        if [ -f "$rc" ]; then
+            . "$rc"
+        fi
+    done
+fi
+unset rc

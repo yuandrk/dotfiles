@@ -1,0 +1,134 @@
+# Dotfiles .gitignore - Security & Privacy
+
+# ============================================================================
+# SECRETS & CREDENTIALS - NEVER COMMIT THESE
+# ============================================================================
+
+# SSH keys
+**/.ssh/
+**/*_rsa
+**/*_rsa.pub
+**/*_ed25519
+**/*_ed25519.pub
+**/id_*
+**/known_hosts
+**/authorized_keys
+
+# GPG keys
+**/.gnupg/
+**/*.gpg
+**/*.asc
+
+# AWS credentials
+**/.aws/credentials
+**/.aws/config
+
+# Kubernetes sensitive files
+**/.kube/config
+**/kubeconfig*
+**/*kubeconfig*
+
+# Environment files with secrets
+**/.env
+**/.env.*
+!**/.env.example
+**/secrets.*
+**/*secret*
+**/*password*
+**/*token*
+
+# API keys and tokens
+**/*_token
+**/*_key
+**/.netrc
+
+# Cloud provider credentials
+**/.azure/
+**/.gcloud/
+**/gcloud/
+
+# Docker credentials
+**/.docker/config.json
+
+# Database
+**/.psql_history
+**/.mysql_history
+**/.rediscli_history
+
+# ============================================================================
+# PRIVATE / SENSITIVE DATA
+# ============================================================================
+
+# Private notes
+**/PRIVATE*
+**/TODO.private
+**/notes.private
+
+# Local machine-specific configs
+**/local.*
+**/*.local
+
+# Backup files that might contain sensitive data
+**/*.backup
+**/*.bak
+**/*~
+
+# History files (may contain sensitive commands)
+**/.bash_history
+**/.zsh_history
+**/.python_history
+**/.node_repl_history
+
+# ============================================================================
+# GENERATED / CACHE FILES
+# ============================================================================
+
+# OS generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.vim/
+
+# Logs
+*.log
+**/*.log
+
+# Temporary files
+*.tmp
+/tmp/
+**/tmp/
+
+# ============================================================================
+# OPTIONAL - UNCOMMENT IF NEEDED
+# ============================================================================
+
+# # If you want to keep bash history private
+# bash/.bash_history
+
+# # If you add private shell scripts
+# bin/private/
+
+# # If you have machine-specific aliases
+# bash/local_aliases.sh
+
+# ============================================================================
+# NOTES
+# ============================================================================
+# Before making repository public:
+# 1. Review all files with: git diff --cached
+# 2. Search for potential secrets: grep -r "password\|token\|key\|secret" .
+# 3. Check bash history in configs
+# 4. Remove any personal information (email, username if desired)
+# 5. Review kubeconfig references
