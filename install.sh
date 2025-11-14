@@ -100,6 +100,9 @@ install_dotfiles() {
     create_symlink "$DOTFILES_DIR/bash/bashrc" "$HOME/.bashrc"
     create_symlink "$DOTFILES_DIR/bash/bash_profile" "$HOME/.bash_profile"
 
+    # Tmux
+    create_symlink "$DOTFILES_DIR/tmux/tmux.conf" "$HOME/.tmux.conf"
+
     # Starship
     mkdir -p "$HOME/.config"
     create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
@@ -275,7 +278,7 @@ show_banner() {
 ╔═══════════════════════════════════════════════════════════════╗
 ║                   DOTFILES INSTALLATION                       ║
 ║                                                               ║
-║  Enhanced Bash + Starship + Kubernetes Tools                  ║
+║  Enhanced Bash + Tmux + Starship + Kubernetes Tools           ║
 ╚═══════════════════════════════════════════════════════════════╝
 EOF
     echo -e "${NC}"

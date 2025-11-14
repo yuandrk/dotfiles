@@ -2,7 +2,7 @@
 
 My personal dotfiles for a powerful, consistent shell environment across Linux and macOS.
 
-**Enhanced Bash + Starship Prompt + Kubernetes Toolkit**
+**Enhanced Bash + Tmux + Starship Prompt + Kubernetes Toolkit**
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey.svg)
@@ -17,6 +17,14 @@ My personal dotfiles for a powerful, consistent shell environment across Linux a
 - **60+ Aliases**: Shortcuts for common operations (git, kubectl, navigation)
 - **20+ Functions**: Useful helpers (mkcd, extract, kubernetes shortcuts)
 - **Cross-platform**: Works on both Linux and macOS
+
+### 🖥️ Tmux Terminal Multiplexer
+- **Ctrl-a prefix**: Screen-like keybindings
+- **Mouse support**: Easy pane/window selection and resizing
+- **Vim-style navigation**: Navigate panes with hjkl
+- **Intuitive splits**: | for vertical, - for horizontal
+- **Modern status bar**: Clean design with session info and time
+- **Smart copy mode**: Vim keybindings for text selection
 
 ### 🎨 Starship Prompt
 - Beautiful, fast, and informative prompt
@@ -38,6 +46,8 @@ dotfiles/
 ├── bash/
 │   ├── bashrc              # Main bash configuration
 │   └── bash_profile        # Bash profile
+├── tmux/
+│   └── tmux.conf           # Tmux configuration
 ├── starship/
 │   └── starship.toml       # Starship prompt config
 ├── kind/
@@ -158,6 +168,30 @@ kind-with-ports [name]  # Create cluster with port mappings
 kind-list               # List all clusters
 kind-clean              # Delete all clusters
 kind-img <image>        # Load Docker image into cluster
+```
+
+### Tmux
+
+```bash
+# Sessions
+tmux                    # Start new session
+tmux new -s <name>      # Start named session
+tmux ls                 # List sessions
+tmux attach -t <name>   # Attach to session
+tmux kill-session -t <name>  # Kill session
+
+# Keybindings (prefix = Ctrl-a)
+Ctrl-a |                # Split vertically
+Ctrl-a -                # Split horizontally
+Ctrl-a h/j/k/l          # Navigate panes (vim-style)
+Alt-Arrow               # Navigate panes (arrow keys)
+Ctrl-a H/J/K/L          # Resize panes
+Ctrl-a c                # New window
+Shift-Left/Right        # Switch windows
+Ctrl-a d                # Detach from session
+Ctrl-a [                # Enter copy mode (vim keys)
+Ctrl-a S                # Sync panes (broadcast to all)
+Ctrl-a ?                # Show all keybindings
 ```
 
 ---
