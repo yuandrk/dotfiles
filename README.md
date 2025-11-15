@@ -2,7 +2,7 @@
 
 My personal dotfiles for a powerful, consistent shell environment across Linux and macOS.
 
-**Enhanced Bash + Tmux + Starship Prompt + Kubernetes Toolkit**
+**Enhanced Bash + Tmux + Neovim (LazyVim) + Starship Prompt + Kubernetes Toolkit**
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey.svg)
@@ -32,6 +32,16 @@ My personal dotfiles for a powerful, consistent shell environment across Linux a
 - Pastel Powerline theme
 - Highly customizable
 
+### ⚡ Neovim with LazyVim
+- **Modern IDE-like experience**: LSP, autocompletion, syntax highlighting
+- **LazyVim**: Pre-configured with sensible defaults and 40+ plugins
+- **Treesitter**: Advanced syntax highlighting and code understanding
+- **Telescope**: Fuzzy finder for files, text, and more
+- **Neo-tree**: File explorer with git integration
+- **LazyGit**: Git integration directly in Neovim
+- **Easy customization**: Add your own plugins in lua/plugins/
+- **Fast startup**: Lazy-loaded plugins for optimal performance
+
 ### ☸️ Kubernetes Toolkit
 - **kubectl** with full bash completion
 - **kubectx/kubens** for fast context/namespace switching
@@ -48,6 +58,12 @@ dotfiles/
 │   └── bash_profile        # Bash profile
 ├── tmux/
 │   └── tmux.conf           # Tmux configuration
+├── nvim/
+│   ├── init.lua            # Neovim entry point
+│   ├── lua/
+│   │   ├── config/         # Options, keymaps, autocmds
+│   │   └── plugins/        # Custom plugins
+│   └── README.md           # Neovim documentation
 ├── starship/
 │   └── starship.toml       # Starship prompt config
 ├── kind/
@@ -93,7 +109,7 @@ source ~/.bashrc
 The installer will:
 1. Backup existing dotfiles (`.bashrc.backup.TIMESTAMP`)
 2. Create symlinks to your home directory
-3. Optionally install tools (Starship, kubectl, k9s, kind)
+3. Optionally install tools (Neovim, Starship, kubectl, k9s, kind)
 4. Set up documentation
 
 ### Installation Options
@@ -168,6 +184,38 @@ kind-with-ports [name]  # Create cluster with port mappings
 kind-list               # List all clusters
 kind-clean              # Delete all clusters
 kind-img <image>        # Load Docker image into cluster
+```
+
+### Neovim (LazyVim)
+
+```bash
+# Launch
+nvim                    # Start Neovim
+nvim <file>             # Open file
+
+# Essential Keybindings (Leader = Space)
+Space-e                 # Toggle file explorer
+Space-ff                # Find files
+Space-fg                # Find text (grep)
+Space-Space             # Command palette
+Space-w                 # Save file
+Ctrl-s                  # Save file (insert/normal mode)
+Space-qq                # Quit all
+
+# Window/Buffer Management
+Space-sv                # Split vertically
+Space-sh                # Split horizontally
+Shift-h                 # Previous buffer
+Shift-l                 # Next buffer
+jk                      # Exit insert mode
+
+# Plugin Management
+:Lazy                   # Open plugin manager
+:LazyExtras             # Browse language support extras
+:Mason                  # LSP/formatter/linter installer
+
+# Documentation
+cat ~/.config/nvim/README.md  # Full guide
 ```
 
 ### Tmux
@@ -259,6 +307,23 @@ kind delete cluster --name test
 ### Bashrc
 Edit `bash/bashrc` to add your own aliases and functions.
 
+### Neovim
+Add custom plugins in `nvim/lua/plugins/`:
+
+```lua
+-- nvim/lua/plugins/mycustom.lua
+return {
+  {
+    "plugin-author/plugin-name",
+    opts = {
+      -- configuration
+    },
+  },
+}
+```
+
+Full customization guide: `cat ~/.config/nvim/README.md`
+
 ### Starship Prompt
 Edit `starship/starship.toml` or try different presets:
 
@@ -304,6 +369,8 @@ source ~/.bashrc
 
 | Tool | Version | Purpose |
 |------|---------|---------|
+| [Neovim](https://neovim.io/) | Latest | Modern modal editor |
+| [LazyVim](https://www.lazyvim.org/) | Latest | Neovim distribution |
 | [Starship](https://starship.rs/) | v1.24.0 | Cross-shell prompt |
 | [kubectl](https://kubernetes.io/docs/reference/kubectl/) | v1.34.1 | Kubernetes CLI |
 | [kubectx/kubens](https://github.com/ahmetb/kubectx) | v0.9.5 | Context/namespace switcher |
@@ -386,6 +453,8 @@ MIT License - Feel free to use and modify!
 
 ## 🙏 Acknowledgments
 
+- [Neovim](https://neovim.io/) - Hyperextensible Vim-based text editor
+- [LazyVim](https://www.lazyvim.org/) - Excellent Neovim starter configuration
 - [Starship](https://starship.rs/) - Amazing prompt
 - [kubectx/kubens](https://github.com/ahmetb/kubectx) - Essential kubectl tools
 - [k9s](https://k9scli.io/) - Best k8s TUI

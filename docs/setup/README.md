@@ -48,6 +48,22 @@ Fast lookup for:
 
 ---
 
+### [NVIM_GUIDE.md](NVIM_GUIDE.md)
+**Neovim with LazyVim quick guide**
+
+Complete Neovim reference:
+- Essential keybindings and commands
+- File navigation and editing
+- LSP features (code completion, go to definition)
+- Plugin management (Lazy, Mason)
+- Git integration and terminal
+- Customization guide
+- Troubleshooting
+
+**Use this when:** Learning Neovim, looking up keybindings, or configuring your editor.
+
+---
+
 ## Quick Start
 
 ### View Documentation
@@ -55,10 +71,11 @@ Fast lookup for:
 # In terminal
 cat ~/docs/setup/SYSTEM_SETUP.md
 cat ~/docs/setup/QUICK_REFERENCE.md
+cat ~/docs/setup/NVIM_GUIDE.md
 
-# Or open in editor
-vim ~/docs/setup/SYSTEM_SETUP.md
-code ~/docs/setup/
+# Or open in Neovim
+nvim ~/docs/setup/SYSTEM_SETUP.md
+nvim ~/docs/setup/NVIM_GUIDE.md
 ```
 
 ### Search Documentation
@@ -80,6 +97,14 @@ grep -A 5 "kind-new" ~/docs/setup/QUICK_REFERENCE.md
 - Starship prompt showing git, k8s context, languages
 - Smart history (10k commands, timestamps, deduplication)
 - Auto-completion and typo correction
+
+### ✅ Neovim Editor
+- Neovim v0.10.2 with LazyVim configuration
+- LSP support for multiple languages
+- Fuzzy finding with Telescope
+- Git integration with LazyGit
+- File explorer with Neo-tree
+- 40+ pre-configured plugins
 
 ### ✅ Kubernetes Tools
 - kubectl v1.34.1 with full completion
@@ -126,6 +151,7 @@ tar czf ~/config-backup-$(date +%Y%m%d).tar.gz \
 ### Configuration Files
 - `~/.bashrc` - Main bash config
 - `~/.config/starship.toml` - Prompt config
+- `~/.config/nvim/` - Neovim configuration
 - `~/.config/kind/*.yaml` - kind cluster templates
 - `~/.config/kind/README.md` - kind usage guide
 

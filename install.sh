@@ -110,6 +110,9 @@ install_dotfiles() {
     # kind configs
     create_symlink "$DOTFILES_DIR/kind" "$HOME/.config/kind"
 
+    # Neovim
+    create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
+
     # Documentation
     create_symlink "$DOTFILES_DIR/docs/setup" "$HOME/docs/setup"
 
@@ -246,6 +249,65 @@ EOF
     print_success "kind installed"
 }
 
+install_neovim() {
+    print_header "Installing Neovim"
+
+    if command -v nvim &> /dev/null; then
+        local nvim_version=$(nvim --version | head -n 1)
+        print_warning "Neovim already installed: $nvim_version"
+        return
+    fi
+
+    mkdir -p "$HOME/.local/bin"
+
+    if [ "$OS_TYPE" = "Darwin" ]; then
+        print_warning "On macOS, please install Neovim using Homebrew:"
+        print_warning "  brew install neovim"
+        return
+    else
+        # Download Neovim AppImage for Linux
+        local NVIM_VERSION="v0.10.2"
+        print_header "Downloading Neovim ${NVIM_VERSION}..."
+        cd /tmp
+
+        # Clean up any previous downloads
+        rm -f nvim.appimage
+
+        # Download using wget (more reliable than curl for GitHub releases)
+        if command -v wget &> /dev/null; then
+            wget -q --show-progress https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim.appimage
+        else
+            curl -L https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim.appimage -o nvim.appimage
+        fi
+
+        chmod +x nvim.appimage
+
+        # Try to run it - if FUSE is not available, extract it
+        if ./nvim.appimage --version &> /dev/null; then
+            mv nvim.appimage "$HOME/.local/bin/nvim"
+            print_success "Neovim installed (AppImage)"
+        else
+            print_warning "AppImage FUSE not available, extracting instead..."
+            ./nvim.appimage --appimage-extract > /dev/null
+            rm -rf "$HOME/.local/nvim"
+            mv squashfs-root "$HOME/.local/nvim"
+            ln -sf "$HOME/.local/nvim/usr/bin/nvim" "$HOME/.local/bin/nvim"
+            print_success "Neovim installed (extracted)"
+        fi
+
+        cd - > /dev/null
+    fi
+
+    print_success "Neovim setup complete"
+    print_warning "Note: LazyVim plugins will be installed on first launch"
+
+    # Verify installation
+    if "$HOME/.local/bin/nvim" --version &> /dev/null; then
+        local installed_version=$("$HOME/.local/bin/nvim" --version | head -n 1)
+        print_success "Verified: $installed_version"
+    fi
+}
+
 check_docker() {
     print_header "Checking Docker"
 
@@ -278,7 +340,7 @@ show_banner() {
 ╔═══════════════════════════════════════════════════════════════╗
 ║                   DOTFILES INSTALLATION                       ║
 ║                                                               ║
-║  Enhanced Bash + Tmux + Starship + Kubernetes Tools           ║
+║  Bash + Tmux + Starship + Neovim + Kubernetes Tools           ║
 ╚═══════════════════════════════════════════════════════════════╝
 EOF
     echo -e "${NC}"
@@ -297,6 +359,7 @@ main() {
             print_header "Installing everything..."
             install_dotfiles
             install_starship
+            install_neovim
             install_kubectl
             install_kubectx_kubens
             install_k9s
@@ -309,12 +372,16 @@ main() {
             ;;
         *)
             # Interactive mode
-            if ask_yes_no "Install dotfiles (.bashrc, starship, etc.)?" "y"; then
+            if ask_yes_no "Install dotfiles (.bashrc, .tmux.conf, nvim, etc.)?" "y"; then
                 install_dotfiles
             fi
 
             if ask_yes_no "Install Starship prompt?" "y"; then
                 install_starship
+            fi
+
+            if ask_yes_no "Install Neovim?" "y"; then
+                install_neovim
             fi
 
             if ask_yes_no "Install Kubernetes tools (kubectl, kubectx, kubens, k9s, kind)?" "y"; then
@@ -334,10 +401,12 @@ main() {
     echo "Next steps:"
     echo "  1. Review the documentation: cat ~/docs/setup/README.md"
     echo "  2. Check the quick reference: cat ~/docs/setup/QUICK_REFERENCE.md"
-    echo "  3. If using kind, ensure Docker is running and accessible"
-    echo "  4. Start a new terminal to see the Starship prompt"
+    echo "  3. Launch Neovim with 'nvim' - plugins will install automatically"
+    echo "  4. Read Neovim config docs: cat ~/.config/nvim/README.md"
+    echo "  5. If using kind, ensure Docker is running and accessible"
+    echo "  6. Start a new terminal to see the Starship prompt"
     echo
-    echo -e "${GREEN}Enjoy your enhanced shell!${NC}"
+    echo -e "${GREEN}Enjoy your enhanced development environment!${NC}"
 }
 
 # Run main installation
