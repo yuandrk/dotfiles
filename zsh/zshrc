@@ -1,0 +1,374 @@
+# .zshrc — interactive zsh configuration (ported from the bash config)
+# Works on macOS (default) and Linux.
+
+# ============================================================================
+# ENVIRONMENT
+# ============================================================================
+
+export KUBECONFIG="$HOME/.kube/config"
+export EDITOR=nvim
+export VISUAL=nvim
+
+# Colors (BSD ls on macOS, GNU ls on Linux)
+export CLICOLOR=1
+export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+
+OS_TYPE="$(uname -s)"
+
+# ============================================================================
+# HISTORY
+# ============================================================================
+
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=10000
+SAVEHIST=20000
+setopt EXTENDED_HISTORY        # timestamps in history
+setopt SHARE_HISTORY           # share history across sessions
+setopt APPEND_HISTORY          # append, don't overwrite
+setopt HIST_IGNORE_ALL_DUPS    # no duplicate entries
+setopt HIST_IGNORE_SPACE       # ignore commands starting with a space
+setopt HIST_REDUCE_BLANKS
+
+# ============================================================================
+# SHELL OPTIONS
+# ============================================================================
+
+setopt AUTO_CD                 # `dir` instead of `cd dir`
+setopt CORRECT                 # autocorrect command typos
+setopt NO_CASE_GLOB            # case-insensitive globbing
+setopt INTERACTIVE_COMMENTS    # allow # comments in interactive shell
+
+# ============================================================================
+# COMPLETION
+# ============================================================================
+
+autoload -Uz compinit && compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # case-insensitive
+
+# ============================================================================
+# ALIASES
+# ============================================================================
+
+# ls (platform-aware)
+if [ "$OS_TYPE" = "Darwin" ]; then
+    alias ls='ls -G'
+    alias ll='ls -lhG'
+    alias la='ls -lhAG'
+else
+    alias ls='ls --color=auto'
+    alias ll='ls -lh --color=auto'
+    alias la='ls -lhA --color=auto'
+fi
+
+# grep with color
+alias grep='grep --color=auto'
+
+# Navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# Safety
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias mkdir='mkdir -pv'
+
+# Utility
+alias h='history'
+alias path='echo -e ${PATH//:/\\n}'
+alias now='date +"%T"'
+alias nowdate='date +"%Y-%m-%d"'
+
+# Git
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git log --oneline --graph --decorate'
+alias gd='git diff'
+
+# ============================================================================
+# FUNCTIONS
+# ============================================================================
+
+# Create directory and cd into it
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Extract various archive types
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *)           echo "'$1' cannot be extracted" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# Find files by name
+ff() {
+    find . -type f -iname "*$1*"
+}
+
+# Find directories by name
+ffd() {
+    find . -type d -iname "*$1*"
+}
+
+# ============================================================================
+# STARSHIP PROMPT
+# ============================================================================
+
+if command -v starship &> /dev/null; then
+    eval "$(starship init zsh)"
+fi
+
+# ============================================================================
+# 1PASSWORD
+# ============================================================================
+
+# Use the 1Password SSH agent when its socket exists (requires the desktop app
+# with "Use the SSH agent" enabled in Settings → Developer).
+if [ "$OS_TYPE" = "Darwin" ]; then
+    _OP_SSH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+else
+    _OP_SSH_SOCK="$HOME/.1password/agent.sock"
+fi
+[ -S "$_OP_SSH_SOCK" ] && export SSH_AUTH_SOCK="$_OP_SSH_SOCK"
+unset _OP_SSH_SOCK
+
+# op CLI: completion + shell plugins (op plugin init <tool> writes plugins.sh)
+if command -v op &> /dev/null; then
+    eval "$(op completion zsh)"
+    [ -f "$HOME/.config/op/plugins.sh" ] && source "$HOME/.config/op/plugins.sh"
+fi
+
+# ============================================================================
+# KUBERNETES
+# ============================================================================
+
+if command -v kubectl &> /dev/null; then
+    source <(kubectl completion zsh)
+    compdef k=kubectl   # let the `k` alias use kubectl completion
+fi
+
+# Aliases
+alias k='kubectl'
+alias kgp='kubectl get pods'
+alias kgs='kubectl get svc'
+alias kgd='kubectl get deployments'
+alias kgn='kubectl get nodes'
+alias kga='kubectl get all'
+alias kgpa='kubectl get pods --all-namespaces'
+alias kdp='kubectl describe pod'
+alias kds='kubectl describe svc'
+alias kdd='kubectl describe deployment'
+alias kdn='kubectl describe node'
+alias kdel='kubectl delete'
+alias kl='kubectl logs'
+alias klf='kubectl logs -f'
+alias kex='kubectl exec -it'
+alias kap='kubectl apply -f'
+alias kdelp='kubectl delete pod'
+
+# Context and namespace
+alias kctx='kubectx'
+alias kns='kubens'
+alias kgc='kubectl config get-contexts'
+alias kcc='kubectl config current-context'
+
+# Quick pod shell access
+kshell() {
+    if [ -z "$1" ]; then
+        echo "Usage: kshell <pod-name> [container-name]"
+        return 1
+    fi
+    if [ -z "$2" ]; then
+        kubectl exec -it "$1" -- /bin/sh
+    else
+        kubectl exec -it "$1" -c "$2" -- /bin/sh
+    fi
+}
+
+# Quick bash access (for pods with bash)
+kbash() {
+    if [ -z "$1" ]; then
+        echo "Usage: kbash <pod-name> [container-name]"
+        return 1
+    fi
+    if [ -z "$2" ]; then
+        kubectl exec -it "$1" -- /bin/bash
+    else
+        kubectl exec -it "$1" -c "$2" -- /bin/bash
+    fi
+}
+
+# Get pod by partial name
+kgpw() {
+    kubectl get pods | grep -i "$1"
+}
+
+# Watch pods (requires `watch`; brew install watch on macOS)
+kwp() {
+    watch -n 2 kubectl get pods
+}
+
+# Get events sorted by time
+kevents() {
+    kubectl get events --sort-by='.lastTimestamp'
+}
+
+# Port forward with common pattern
+kpf() {
+    if [ -z "$1" ] || [ -z "$2" ]; then
+        echo "Usage: kpf <pod-name> <port>"
+        echo "Example: kpf my-pod 8080"
+        return 1
+    fi
+    kubectl port-forward "$1" "$2:$2"
+}
+
+# Get resource usage
+ktop() {
+    if [ "$1" = "pod" ] || [ "$1" = "pods" ]; then
+        kubectl top pods
+    elif [ "$1" = "node" ] || [ "$1" = "nodes" ]; then
+        kubectl top nodes
+    else
+        echo "Top pods:"
+        kubectl top pods 2>/dev/null
+        echo ""
+        echo "Top nodes:"
+        kubectl top nodes 2>/dev/null
+    fi
+}
+
+# Restart deployment
+krestart() {
+    if [ -z "$1" ]; then
+        echo "Usage: krestart <deployment-name>"
+        return 1
+    fi
+    kubectl rollout restart deployment "$1"
+}
+
+# ============================================================================
+# KIND (Kubernetes IN Docker)
+# ============================================================================
+
+alias kind-create='kind create cluster'
+alias kind-delete='kind delete cluster'
+alias kind-list='kind get clusters'
+alias kind-load='kind load docker-image'
+
+# Create a kind cluster with a custom name
+kind-new() {
+    local cluster_name="${1:-kind}"
+    echo "Creating kind cluster: $cluster_name"
+    kind create cluster --name "$cluster_name"
+}
+
+# Create a multi-node cluster
+kind-multi() {
+    local cluster_name="${1:-kind-multi}"
+    local config_file="/tmp/kind-multi-node.yaml"
+
+    cat > "$config_file" << 'EOF'
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+EOF
+
+    echo "Creating multi-node cluster: $cluster_name"
+    kind create cluster --name "$cluster_name" --config "$config_file"
+    rm "$config_file"
+}
+
+# Create cluster with port mapping (useful for testing services)
+kind-with-ports() {
+    local cluster_name="${1:-kind-ports}"
+    local config_file="/tmp/kind-ports.yaml"
+
+    cat > "$config_file" << 'EOF'
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+  - containerPort: 30000
+    hostPort: 30000
+    protocol: TCP
+EOF
+
+    echo "Creating cluster with port mappings: $cluster_name"
+    kind create cluster --name "$cluster_name" --config "$config_file"
+    rm "$config_file"
+}
+
+# Delete all kind clusters
+kind-clean() {
+    echo "Deleting all kind clusters..."
+    kind get clusters | xargs -I {} kind delete cluster --name {}
+}
+
+# Quick switch to kind cluster context
+kind-use() {
+    local cluster_name="${1:-kind}"
+    kubectl cluster-info --context "kind-${cluster_name}"
+    kubectl config use-context "kind-${cluster_name}"
+}
+
+# Load local Docker image into kind cluster
+kind-img() {
+    if [ -z "$1" ]; then
+        echo "Usage: kind-img <image-name> [cluster-name]"
+        echo "Example: kind-img my-app:latest"
+        return 1
+    fi
+    local image="$1"
+    local cluster="${2:-kind}"
+    echo "Loading image $image into cluster $cluster"
+    kind load docker-image "$image" --name "$cluster"
+}
+
+# Get nodes of a kind cluster
+kind-nodes() {
+    local cluster="${1:-kind}"
+    echo "Nodes for cluster: $cluster"
+    kubectl get nodes --context "kind-${cluster}"
+}
+
+# ============================================================================
+# LOCAL OVERRIDES
+# ============================================================================
+# Drop machine-specific snippets in ~/.zshrc.d/ (not tracked by this repo)
+if [ -d "$HOME/.zshrc.d" ]; then
+    for rc in "$HOME"/.zshrc.d/*.zsh(N); do
+        [ -f "$rc" ] && source "$rc"
+    done
+    unset rc
+fi

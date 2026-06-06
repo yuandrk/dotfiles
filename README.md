@@ -2,7 +2,10 @@
 
 My personal dotfiles for a powerful, consistent shell environment across Linux and macOS.
 
-**Enhanced Bash + Tmux + Neovim (LazyVim) + Starship Prompt + Kubernetes Toolkit**
+**Zsh (+ Bash) + Tmux + Neovim (LazyVim) + Starship Prompt + Kubernetes Toolkit**
+
+> On **macOS** the install is Homebrew-first and targets the default **zsh** shell.
+> On **Linux** it falls back to curl-based installs and keeps the bash config.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey.svg)
@@ -53,9 +56,13 @@ My personal dotfiles for a powerful, consistent shell environment across Linux a
 
 ```
 dotfiles/
+├── zsh/
+│   ├── zshrc               # Main zsh configuration (macOS default)
+│   └── zprofile            # Login shell: Homebrew env + PATH
 ├── bash/
-│   ├── bashrc              # Main bash configuration
+│   ├── bashrc              # Bash configuration (Linux / `bash` sessions)
 │   └── bash_profile        # Bash profile
+├── Brewfile                # macOS tool list (brew bundle)
 ├── tmux/
 │   └── tmux.conf           # Tmux configuration
 ├── nvim/
@@ -87,29 +94,35 @@ dotfiles/
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **Bash** 4.0+ (usually pre-installed)
-- **curl** (for downloading tools)
 - **git** (for cloning this repo)
-- **Docker** (optional, for kind)
+- **macOS:** [Homebrew](https://brew.sh) — the installer offers to install it for you if missing
+- **Linux:** `curl` (tools are downloaded directly)
+- **Docker engine** (optional, for kind — `colima` on macOS, or Docker Desktop)
 
-### Installation
+### Installation (macOS)
 
 ```bash
 # Clone the repository
 git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
 
-# Run the installer
+# Run the installer (installs Homebrew if needed, then everything via brew bundle)
 cd ~/dotfiles
 ./install.sh
 
-# Reload your shell
-source ~/.bashrc
+# Open a new terminal, or reload the shell
+source ~/.zshrc
+```
+
+Or install just the tools yourself:
+
+```bash
+brew bundle --file=~/dotfiles/Brewfile
 ```
 
 The installer will:
-1. Backup existing dotfiles (`.bashrc.backup.TIMESTAMP`)
-2. Create symlinks to your home directory
-3. Optionally install tools (Neovim, Starship, kubectl, k9s, kind)
+1. Back up any existing real dotfiles (`.zshrc.backup.TIMESTAMP`) — existing symlinks are replaced silently
+2. Symlink `.zshrc`, `.zprofile`, `.tmux.conf`, nvim, starship, kind configs into place
+3. On macOS, install all tools via Homebrew (`Brewfile`); on Linux, download them with curl
 4. Set up documentation
 
 ### Installation Options
@@ -360,7 +373,7 @@ That's it! The installer handles platform differences (Linux vs macOS).
 cd ~/dotfiles
 git pull
 ./install.sh --minimal  # Re-link dotfiles
-source ~/.bashrc
+source ~/.zshrc
 ```
 
 ---
@@ -416,12 +429,12 @@ git diff --cached
 
 ### Dotfiles not loading
 ```bash
-source ~/.bashrc
+source ~/.zshrc   # bash: source ~/.bashrc
 ```
 
 ### kubectl completion not working
 ```bash
-source <(kubectl completion bash)
+source <(kubectl completion zsh)   # bash: kubectl completion bash
 ```
 
 ### kind can't connect to Docker

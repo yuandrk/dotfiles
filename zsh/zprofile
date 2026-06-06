@@ -1,0 +1,13 @@
+# .zprofile — login shell setup (read once per login; macOS Terminal runs login shells)
+
+# Homebrew environment (Apple Silicon first, then Intel)
+if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+# User binaries
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+    export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
