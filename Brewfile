@@ -3,6 +3,7 @@
 
 # --- Shell / prompt ---
 brew "starship"        # cross-shell prompt
+cask "font-jetbrains-mono-nerd-font"  # Nerd Font for Starship glyphs (set in iTerm)
 brew "tmux"            # terminal multiplexer
 brew "neovim"          # editor (LazyVim config in nvim/)
 
