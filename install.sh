@@ -95,6 +95,9 @@ install_dotfiles() {
     mkdir -p "$HOME/.config"
     create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
 
+    # Ghostty terminal
+    create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
+
     # kind configs
     create_symlink "$DOTFILES_DIR/kind" "$HOME/.config/kind"
 

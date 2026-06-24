@@ -21,6 +21,12 @@ My personal dotfiles for a powerful, consistent shell environment across Linux a
 - **20+ Functions**: Useful helpers (mkcd, extract, kubernetes shortcuts)
 - **Cross-platform**: Works on both Linux and macOS
 
+### 👻 Ghostty Terminal
+- Fast, GPU-accelerated terminal emulator (replaces a manually-configured iTerm2)
+- Config tracked at `ghostty/config`, symlinked to `~/.config/ghostty/config`
+- JetBrainsMono Nerd Font preset for Starship glyphs
+- Color scheme ported directly from the previous iTerm2 profile
+
 ### 🖥️ Tmux Terminal Multiplexer
 - **Ctrl-a prefix**: Screen-like keybindings
 - **Mouse support**: Easy pane/window selection and resizing
@@ -382,6 +388,7 @@ source ~/.zshrc
 
 | Tool | Version | Purpose |
 |------|---------|---------|
+| [Ghostty](https://ghostty.org/) | Latest | GPU-accelerated terminal emulator |
 | [Neovim](https://neovim.io/) | Latest | Modern modal editor |
 | [LazyVim](https://www.lazyvim.org/) | Latest | Neovim distribution |
 | [Starship](https://starship.rs/) | v1.24.0 | Cross-shell prompt |

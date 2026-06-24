@@ -1,9 +1,10 @@
 # Brewfile — install everything with:  brew bundle --file=Brewfile
 # Architecture-correct on Apple Silicon and Intel automatically (brew handles it).
 
-# --- Shell / prompt ---
+# --- Terminal / shell / prompt ---
+cask "ghostty"         # terminal emulator (config in ghostty/config)
 brew "starship"        # cross-shell prompt
-cask "font-jetbrains-mono-nerd-font"  # Nerd Font for Starship glyphs (set in iTerm)
+cask "font-jetbrains-mono-nerd-font"  # Nerd Font for Starship glyphs (set in ghostty/config)
 brew "tmux"            # terminal multiplexer
 brew "neovim"          # editor (LazyVim config in nvim/)
 

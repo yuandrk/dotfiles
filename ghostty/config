@@ -1,0 +1,50 @@
+# Ghostty configuration
+# Docs: https://ghostty.org/docs/config
+# Managed by dotfiles — symlinked to ~/.config/ghostty/config by install.sh.
+# Replaces the manually-configured iTerm2 setup; colors below are ported
+# directly from the iTerm2 "Default" profile.
+
+# --- Font ---
+# JetBrainsMono Nerd Font is installed via the Brewfile and provides the
+# powerline glyphs/icons used by the Starship prompt.
+font-family = "JetBrainsMono Nerd Font"
+font-size = 13
+
+# --- Colors (ported from iTerm2 "Default" profile, light theme) ---
+background = #fafafa
+foreground = #101010
+cursor-color = #000000
+cursor-text = #ffffff
+selection-background = #b3d7ff
+selection-foreground = #000000
+
+# 16-color ANSI palette
+palette = 0=#14191e
+palette = 1=#b43c2a
+palette = 2=#00c200
+palette = 3=#c7c400
+palette = 4=#2744c7
+palette = 5=#c040be
+palette = 6=#00c5c7
+palette = 7=#c7c7c7
+palette = 8=#686868
+palette = 9=#dd7975
+palette = 10=#58e790
+palette = 11=#ece100
+palette = 12=#a7abf2
+palette = 13=#e17ee1
+palette = 14=#60fdff
+palette = 15=#ffffff
+
+# --- Cursor ---
+cursor-style = block
+mouse-hide-while-typing = true
+
+# --- Window ---
+window-padding-x = 8
+window-padding-y = 8
+confirm-close-surface = false
+
+# --- Behavior ---
+copy-on-select = clipboard
+shell-integration = zsh
