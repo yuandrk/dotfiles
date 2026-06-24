@@ -48,3 +48,9 @@ confirm-close-surface = false
 # --- Behavior ---
 copy-on-select = clipboard
 shell-integration = zsh
+
+# --- tmux integration ---
+# Launch into a shared tmux session named "main" (attach if it already exists,
+# create it otherwise). Falls back to a normal login shell if tmux is missing
+# so Ghostty always opens. New windows attach to the same session.
+command = zsh -l -c "tmux new-session -A -s main || exec zsh -l"
