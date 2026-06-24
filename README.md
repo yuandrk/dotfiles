@@ -26,6 +26,10 @@ My personal dotfiles for a powerful, consistent shell environment across Linux a
 - Config tracked at `ghostty/config`, symlinked to `~/.config/ghostty/config`
 - JetBrainsMono Nerd Font preset for Starship glyphs
 - Color scheme ported directly from the previous iTerm2 profile
+- **Boots into tmux**: opens straight into the shared `main` session (attaches
+  if it's already running), so reopening Ghostty puts you back where you left off
+- **Native macOS → tmux keybinds**: `Cmd+T` new window, `Cmd+W` close pane,
+  `Cmd+D` / `Cmd+Shift+D` split right/down, `Cmd+1..9` jump to a tmux window
 
 ### 🖥️ Tmux Terminal Multiplexer
 - **Ctrl-a prefix**: Screen-like keybindings
@@ -34,6 +38,10 @@ My personal dotfiles for a powerful, consistent shell environment across Linux a
 - **Intuitive splits**: | for vertical, - for horizontal
 - **Modern status bar**: Clean design with session info and time
 - **Smart copy mode**: Vim keybindings for text selection
+- **Session persistence**: `tmux-resurrect` + `tmux-continuum` auto-save every
+  15 min and restore your windows, panes, layouts and nvim sessions after a
+  reboot. Plugins are bootstrapped by `install.sh` via `tpm`. Manual save/restore:
+  `prefix + Ctrl-s` / `prefix + Ctrl-r`
 
 ### 🎨 Starship Prompt
 - Beautiful, fast, and informative prompt

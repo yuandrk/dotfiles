@@ -51,6 +51,32 @@ fd <pattern>                # Find directories by name
 
 ---
 
+## Terminal - Ghostty + Tmux
+
+Ghostty boots straight into a shared tmux session named `main` (config:
+`ghostty/config`). Reopening Ghostty reattaches to it; after a reboot,
+tmux-continuum restores the previous windows, panes, layouts and nvim sessions.
+
+```text
+# Ghostty → tmux keybinds (macOS Cmd shortcuts that drive tmux)
+Cmd+T                       # new tmux window        (prefix c)
+Cmd+W                       # close current pane     (prefix x — asks y/n)
+Cmd+D                       # split right            (prefix | )
+Cmd+Shift+D                 # split down             (prefix - )
+Cmd+1 .. Cmd+9              # jump to tmux window N   (prefix N)
+Cmd+Q                       # quit Ghostty itself (not a tmux pane)
+
+# Tmux session persistence (tmux-resurrect + tmux-continuum)
+prefix + Ctrl-s             # save session now
+prefix + Ctrl-r             # restore last saved session
+                           # (auto-saves every 15 min; auto-restores on start)
+```
+
+Plugins are installed by `install.sh` (clones `tpm`, then runs its
+`install_plugins`). To install by hand: open tmux and press `prefix + I`.
+
+---
+
 ## Kubernetes - kubectl Aliases
 
 ### Get Resources
