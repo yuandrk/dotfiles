@@ -52,30 +52,5 @@ shell-integration = zsh
 # --- tmux integration ---
 # Launch into a shared tmux session named "main" (attach if it already exists,
 # create it otherwise). Falls back to a normal login shell if tmux is missing
-# so Ghostty always opens. Every Ghostty window attaches to this same session,
-# so reopening Ghostty drops you straight back where you left off. Across a
-# reboot, tmux-continuum (see tmux.conf) restores the previous session's
-# windows, panes, layouts and nvim sessions when the server first starts.
+# so Ghostty always opens. New windows attach to the same session.
 command = zsh -l -c "tmux new-session -A -s main || exec zsh -l"
-
-# Native macOS shortcuts that drive tmux (prefix is Ctrl-a = \x01):
-#   Cmd+T        new tmux window           (prefix c)
-#   Cmd+W        close current pane        (prefix x — tmux asks to confirm)
-#   Cmd+D        split right               (prefix | )
-#   Cmd+Shift+D  split down                (prefix - )
-#   Cmd+1..9     jump to tmux window N      (prefix N)
-# Cmd+C / Cmd+V keep Ghostty's default copy/paste. To close the Ghostty window
-# itself (not a tmux pane) use Cmd+Q or the window's close button.
-keybind = cmd+t=text:\x01c
-keybind = cmd+w=text:\x01x
-keybind = cmd+d=text:\x01|
-keybind = cmd+shift+d=text:\x01-
-keybind = cmd+one=text:\x011
-keybind = cmd+two=text:\x012
-keybind = cmd+three=text:\x013
-keybind = cmd+four=text:\x014
-keybind = cmd+five=text:\x015
-keybind = cmd+six=text:\x016
-keybind = cmd+seven=text:\x017
-keybind = cmd+eight=text:\x018
-keybind = cmd+nine=text:\x019

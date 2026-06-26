@@ -73,23 +73,6 @@ create_symlink() {
     print_success "Linked $target -> $source"
 }
 
-setup_tmux_plugins() {
-    # Bootstrap the tmux plugin manager (tpm) and install the plugins declared
-    # in tmux.conf — tmux-resurrect + tmux-continuum (session save/restore).
-    local tpm_dir="$HOME/.tmux/plugins/tpm"
-    if [ ! -d "$tpm_dir" ]; then
-        print_header "Installing tmux plugin manager (tpm)"
-        git clone --depth 1 https://github.com/tmux-plugins/tpm "$tpm_dir" \
-            || { print_warning "Could not clone tpm; skipping tmux plugins"; return 0; }
-    fi
-    # Non-interactive plugin install (equivalent to pressing prefix + I).
-    if [ -x "$tpm_dir/bin/install_plugins" ]; then
-        "$tpm_dir/bin/install_plugins" \
-            || print_warning "tpm: open tmux and press 'prefix + I' to finish installing plugins"
-    fi
-    print_success "tmux plugins ready (resurrect + continuum)"
-}
-
 # ============================================================================
 # Dotfiles (symlinks)
 # ============================================================================
@@ -105,9 +88,8 @@ install_dotfiles() {
     create_symlink "$DOTFILES_DIR/bash/bashrc" "$HOME/.bashrc"
     create_symlink "$DOTFILES_DIR/bash/bash_profile" "$HOME/.bash_profile"
 
-    # Tmux (config + plugin manager / session persistence)
+    # Tmux
     create_symlink "$DOTFILES_DIR/tmux/tmux.conf" "$HOME/.tmux.conf"
-    setup_tmux_plugins
 
     # Starship
     mkdir -p "$HOME/.config"
