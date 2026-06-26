@@ -10,13 +10,13 @@
 font-family = "JetBrainsMono Nerd Font"
 font-size = 13
 
-# --- Colors (ported from iTerm2 "Default" profile, light theme) ---
-background = #fafafa
-foreground = #101010
-cursor-color = #000000
-cursor-text = #ffffff
-selection-background = #b3d7ff
-selection-foreground = #000000
+# --- Colors (dark background; ANSI palette ported from iTerm2 "Default") ---
+background = #1e1e1e
+foreground = #d4d4d4
+cursor-color = #ffffff
+cursor-text = #000000
+selection-background = #264f78
+selection-foreground = #ffffff
 
 # 16-color ANSI palette
 palette = 0=#14191e
@@ -49,8 +49,6 @@ confirm-close-surface = false
 copy-on-select = clipboard
 shell-integration = zsh
 
-# --- tmux integration ---
-# Launch into a shared tmux session named "main" (attach if it already exists,
-# create it otherwise). Falls back to a normal login shell if tmux is missing
-# so Ghostty always opens. New windows attach to the same session.
-command = zsh -l -c "tmux new-session -A -s main || exec zsh -l"
+# --- Shell ---
+# Open a normal login shell; tmux is NOT started automatically. Run `tmux`
+# (or `tmux new -s main` / `tmux a`) manually when you want a session.
