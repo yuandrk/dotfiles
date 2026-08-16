@@ -43,12 +43,66 @@ mouse-hide-while-typing = true
 # --- Window ---
 window-padding-x = 8
 window-padding-y = 8
+# Split leftover pixels evenly instead of piling them on one edge, so the grid
+# stays centred when the window doesn't divide cleanly into cells.
+window-padding-balance = true
 confirm-close-surface = false
+# Restore windows/tabs (and their working directories) after a quit or restart.
+window-save-state = always
 
 # --- Behavior ---
 copy-on-select = clipboard
 shell-integration = zsh
+# Defaults plus:
+#   sudo         — keep xterm-ghostty terminfo across `sudo`, so `sudo nvim` works
+#   ssh-env      — send COLORTERM and downgrade TERM to xterm-256color over ssh
+#   ssh-terminfo — install Ghostty's terminfo on remote hosts (once, then cached),
+#                  which fixes "unknown terminal type xterm-ghostty" on servers
+shell-integration-features = cursor,title,path,sudo,ssh-env,ssh-terminfo
+
+# --- macOS keyboard ---
+# Treat LEFT Option as Alt so Alt-based bindings work: tmux `M-Left/M-Right`
+# pane switching (tmux/tmux.conf) and zsh word motion (alt+b / alt+f).
+# Right Option keeps its normal macOS behaviour for typing special characters.
+macos-option-as-alt = left
+
+# --- Updates ---
+# Ghostty is installed via Homebrew (Brewfile), so let brew do the upgrading;
+# Sparkle only notifies that something is available.
+auto-update = check
+
+# --- Quick terminal (drop-down) ---
+# Ghostty ships the feature but binds no key by default. `global:` works even
+# when Ghostty isn't focused — macOS will ask for Accessibility permission the
+# first time. Press cmd+` anywhere to drop a terminal over the current app.
+keybind = global:cmd+backquote=toggle_quick_terminal
+quick-terminal-position = top
+quick-terminal-autohide = true
 
 # --- Shell ---
 # Open a normal login shell; tmux is NOT started automatically. Run `tmux`
 # (or `tmux new -s main` / `tmux a`) manually when you want a session.
+
+# ============================================================================
+# Optional — uncomment to taste
+# ============================================================================
+# Follow the macOS light/dark appearance instead of the fixed palette above.
+# Overrides every color set earlier in this file, so comment those out too.
+# `ghostty +list-themes` previews all 463 bundled themes.
+# theme = dark:Dark+,light:Builtin Light
+
+# Translucent background with a blur behind it.
+# background-opacity = 0.95
+# background-blur = true
+
+# Cleaner title bar: tabs sit inside it (`tabs`) or drop it entirely (`hidden`).
+# macos-titlebar-style = tabs
+
+# Dim the inactive side of a split so the focused one stands out more.
+# unfocused-split-opacity = 0.85
+
+# Turn off JetBrains Mono's programming ligatures (-> stays two glyphs).
+# font-feature = -calt,-liga,-dlig
+
+# Thicker glyph rendering; helps on non-Retina external displays.
+# font-thicken = true
