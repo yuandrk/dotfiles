@@ -56,6 +56,29 @@
 **/.rediscli_history
 
 # ============================================================================
+# CLAUDE CODE - never commit credentials or session data
+# ============================================================================
+# Only claude/settings.json and claude/statusline-command.sh are tracked.
+# Everything below is machine-local state or secrets.
+
+**/.claude/.credentials.json
+**/.claude/history.jsonl
+**/.claude/projects/
+**/.claude/sessions/
+**/.claude/session-env/
+**/.claude/shell-snapshots/
+**/.claude/file-history/
+**/.claude/paste-cache/
+**/.claude/backups/
+**/.claude/cache/
+**/.claude/plans/
+**/.claude/todos/
+**/.claude/statsig/
+**/.claude.json
+**/settings.local.json
+**/.mcp.json
+
+# ============================================================================
 # PRIVATE / SENSITIVE DATA
 # ============================================================================
 

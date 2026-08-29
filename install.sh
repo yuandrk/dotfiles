@@ -104,6 +104,12 @@ install_dotfiles() {
     # Neovim
     create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 
+    # Claude Code — link individual files only. ~/.claude also holds credentials
+    # and session state, which must never be symlinked into a public repo.
+    mkdir -p "$HOME/.claude"
+    create_symlink "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
+    create_symlink "$DOTFILES_DIR/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
+
     # Documentation
     create_symlink "$DOTFILES_DIR/docs/setup" "$HOME/docs/setup"
 
