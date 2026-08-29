@@ -309,15 +309,13 @@ k9s
 
 ### Config Files
 ```
-~/.bashrc                          # Bash configuration
+~/.zshrc                           # Zsh configuration
 ~/.config/starship.toml            # Starship config
 ~/.config/kind/*.yaml              # kind cluster configs
 ```
 
 ### Documentation
 ```
-~/docs/setup/SYSTEM_SETUP.md       # Full system documentation
-~/docs/setup/AGENT_CONTEXT.md      # AI agent context
 ~/docs/setup/QUICK_REFERENCE.md    # This file
 ~/.config/kind/README.md           # kind usage guide
 ```
@@ -399,7 +397,7 @@ alias
 
 ### Reload Configuration
 ```bash
-source ~/.bashrc
+source ~/.zshrc
 ```
 
 ### Check Tool Versions
@@ -450,8 +448,6 @@ kind delete clusters --all         # Nuclear option
 ---
 
 **Quick Access:**
-- Full docs: `cat ~/docs/setup/SYSTEM_SETUP.md`
-- Agent context: `cat ~/docs/setup/AGENT_CONTEXT.md`
 - kind examples: `cat ~/.config/kind/README.md`
 
 **Last Updated:** 2025-11-08

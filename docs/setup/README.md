@@ -1,38 +1,11 @@
 # Setup Documentation
 
-This directory contains comprehensive documentation for your development environment setup.
+Cheatsheets for the shell aliases, functions and Neovim setup in this repo.
+
+Environment and architecture notes now live in [`CLAUDE.md`](../../CLAUDE.md) at
+the repo root, which replaced the old `SYSTEM_SETUP.md` and `AGENT_CONTEXT.md`.
 
 ## Documents
-
-### [SYSTEM_SETUP.md](SYSTEM_SETUP.md)
-**Complete system setup documentation**
-
-Everything about your environment:
-- Bash configuration and enhancements
-- Starship prompt setup
-- Kubernetes tools (kubectl, k9s, kubectx/kubens)
-- kind local cluster setup
-- File locations
-- Maintenance and updates
-- Syncing to macOS
-
-**Use this when:** You need detailed information about how everything is configured, or when setting up a new machine.
-
----
-
-### [AGENT_CONTEXT.md](AGENT_CONTEXT.md)
-**AI Agent context and reference**
-
-Information for AI assistants to understand your environment:
-- Available tools and commands
-- Custom aliases and functions
-- Best practices for suggestions
-- Environment constraints (flatpak, etc.)
-- Common workflows and patterns
-
-**Use this when:** Working with AI assistants, or to remind yourself of all available shortcuts.
-
----
 
 ### [QUICK_REFERENCE.md](QUICK_REFERENCE.md)
 **Command quick reference**
@@ -69,12 +42,11 @@ Complete Neovim reference:
 ### View Documentation
 ```bash
 # In terminal
-cat ~/docs/setup/SYSTEM_SETUP.md
 cat ~/docs/setup/QUICK_REFERENCE.md
 cat ~/docs/setup/NVIM_GUIDE.md
 
 # Or open in Neovim
-nvim ~/docs/setup/SYSTEM_SETUP.md
+nvim ~/docs/setup/QUICK_REFERENCE.md
 nvim ~/docs/setup/NVIM_GUIDE.md
 ```
 
@@ -133,14 +105,14 @@ declare -F | grep -E '(kind|k8s|kube)'
 
 ### Reload Configuration
 ```bash
-source ~/.bashrc
+source ~/.zshrc
 ```
 
 ### Backup Configuration
 ```bash
 tar czf ~/config-backup-$(date +%Y%m%d).tar.gz \
-  ~/.bashrc \
-  ~/.bash_profile \
+  ~/.zshrc \
+  ~/.zprofile \
   ~/.config/starship.toml \
   ~/.config/kind/ \
   ~/docs/setup/
@@ -149,7 +121,7 @@ tar czf ~/config-backup-$(date +%Y%m%d).tar.gz \
 ## Additional Resources
 
 ### Configuration Files
-- `~/.bashrc` - Main bash config
+- `~/.zshrc` - Main zsh config
 - `~/.config/starship.toml` - Prompt config
 - `~/.config/nvim/` - Neovim configuration
 - `~/.config/kind/*.yaml` - kind cluster templates
@@ -165,7 +137,7 @@ tar czf ~/config-backup-$(date +%Y%m%d).tar.gz \
 
 If you're an AI assistant helping this user:
 
-1. **Read** `AGENT_CONTEXT.md` for environment details
+1. **Read** `CLAUDE.md` at the repo root for environment details
 2. **Reference** custom aliases and functions
 3. **Suggest** kind for testing k8s workloads
 4. **Use** helper functions (kshell, kgpw, kind-new, etc.)
@@ -176,9 +148,8 @@ If you're an AI assistant helping this user:
 To update this documentation:
 ```bash
 # Edit files
-vim ~/docs/setup/SYSTEM_SETUP.md
-vim ~/docs/setup/AGENT_CONTEXT.md
 vim ~/docs/setup/QUICK_REFERENCE.md
+vim ~/docs/setup/NVIM_GUIDE.md
 
 # Update date stamps at bottom of each file
 ```

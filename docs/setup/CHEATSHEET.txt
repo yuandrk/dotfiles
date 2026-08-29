@@ -1,6 +1,6 @@
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                         BASH & KUBERNETES CHEATSHEET                          ║
-║                              yuandrk@fedora                                   ║
+║                              yuandrk@macbook                                   ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -122,7 +122,7 @@
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ TROUBLESHOOTING                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ source ~/.bashrc             Reload bash config                            │
+│ source ~/.zshrc              Reload zsh config                             │
 │ kctx                         Check/switch context                          │
 │ kgc                          List all contexts                             │
 │ docker ps                    Check running containers                      │
@@ -133,12 +133,10 @@
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ FILE LOCATIONS                                                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ ~/.bashrc                                Main bash config                  │
+│ ~/.zshrc                                 Main zsh config                   │
 │ ~/.config/starship.toml                  Starship prompt config            │
 │ ~/.config/kind/*.yaml                    kind cluster templates            │
-│ ~/docs/setup/SYSTEM_SETUP.md             Complete documentation            │
 │ ~/docs/setup/QUICK_REFERENCE.md          Detailed command reference        │
-│ ~/docs/setup/AGENT_CONTEXT.md            AI agent context                  │
 │ ~/.local/bin/                            All installed tools               │
 └─────────────────────────────────────────────────────────────────────────────┘
 
@@ -146,7 +144,6 @@
 │ DOCUMENTATION                                                               │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ cat ~/docs/setup/QUICK_REFERENCE.md      Command reference                 │
-│ cat ~/docs/setup/SYSTEM_SETUP.md         Full setup docs                   │
 │ cat ~/.config/kind/README.md             kind examples                     │
 │                                                                             │
 │ External:                                                                   │

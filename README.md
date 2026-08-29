@@ -86,9 +86,8 @@ dotfiles/
 │   └── README.md
 ├── docs/
 │   └── setup/
-│       ├── SYSTEM_SETUP.md      # Complete documentation
 │       ├── QUICK_REFERENCE.md   # Command reference
-│       ├── AGENT_CONTEXT.md     # AI assistant context
+│       ├── NVIM_GUIDE.md        # Neovim / LazyVim guide
 │       └── CHEATSHEET.txt       # Printable cheatsheet
 ├── install.sh              # Installation script
 ├── .gitignore              # Protects secrets
@@ -265,11 +264,9 @@ Ctrl-a ?                # Show all keybindings
 
 ## 📖 Documentation
 
-All documentation is available in `docs/setup/`:
-
-- **[SYSTEM_SETUP.md](docs/setup/SYSTEM_SETUP.md)** - Complete system documentation
+- **[CLAUDE.md](CLAUDE.md)** - Environment overview, repo layout and conventions
 - **[QUICK_REFERENCE.md](docs/setup/QUICK_REFERENCE.md)** - Command reference
-- **[AGENT_CONTEXT.md](docs/setup/AGENT_CONTEXT.md)** - AI assistant context
+- **[NVIM_GUIDE.md](docs/setup/NVIM_GUIDE.md)** - Neovim / LazyVim guide
 - **[CHEATSHEET.txt](docs/setup/CHEATSHEET.txt)** - Printable cheatsheet
 
 Quick access:
@@ -403,13 +400,13 @@ All tools are installed to `~/.local/bin/` (no sudo required).
 
 ## 🤝 For AI Assistants
 
-This repository includes `docs/setup/AGENT_CONTEXT.md` which provides context for AI coding assistants (Claude Code, GitHub Copilot, etc.) to understand this environment.
+This repository includes [`CLAUDE.md`](CLAUDE.md) at the root, which gives AI coding assistants (Claude Code, GitHub Copilot, etc.) the context they need for this environment.
 
 Key points:
-- Environment is optimized for Kubernetes learning/testing
-- Many custom aliases and functions are available
-- kind is preferred for local testing
-- User may be in a flatpak environment
+- macOS on Apple Silicon; zsh + Ghostty + tmux + Starship + LazyVim
+- Files in `$HOME` are symlinks into this repo — editing them edits the repo
+- Machine-specific shell config belongs in `~/.zshrc.d/`, never in `zsh/zshrc`
+- Many custom aliases and functions are available; kind is preferred for local k8s testing
 
 ---
 

@@ -264,7 +264,7 @@ yip             Yank inside paragraph
 
 **Editing a config file**:
 ```
-nvim ~/.bashrc
+nvim ~/.zshrc
 # Make changes
 :w
 :q
