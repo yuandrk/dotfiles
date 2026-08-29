@@ -49,6 +49,9 @@ window-padding-balance = true
 confirm-close-surface = false
 # Restore windows/tabs (and their working directories) after a quit or restart.
 window-save-state = always
+# Tabs sit inside the title bar rather than in a strip below it — one less row
+# of chrome, which is worth having on a 13" laptop display.
+macos-titlebar-style = tabs
 
 # --- Behavior ---
 copy-on-select = clipboard
@@ -61,10 +64,17 @@ shell-integration = zsh
 shell-integration-features = cursor,title,path,sudo,ssh-env,ssh-terminfo
 
 # --- macOS keyboard ---
-# Treat LEFT Option as Alt so Alt-based bindings work: tmux `M-Left/M-Right`
-# pane switching (tmux/tmux.conf) and zsh word motion (alt+b / alt+f).
+# Treat LEFT Option as Alt so Alt-based bindings reach the shell and tmux:
+# zsh word motion (alt+b / alt+f) and tmux pane switching (tmux/tmux.conf).
 # Right Option keeps its normal macOS behaviour for typing special characters.
 macos-option-as-alt = left
+
+# Ghostty binds alt+arrow_left/right to esc:b / esc:f by DEFAULT, which eats the
+# keys before tmux sees them, so `bind -n M-Left select-pane -L` never fires.
+# (M-Up/M-Down always worked — Ghostty binds no default there.) Unbind both to
+# hand the keys back to tmux; zsh word motion still works via alt+b / alt+f.
+keybind = alt+arrow_left=unbind
+keybind = alt+arrow_right=unbind
 
 # --- Updates ---
 # Ghostty is installed via Homebrew (Brewfile), so let brew do the upgrading;
@@ -95,14 +105,17 @@ quick-terminal-autohide = true
 # background-opacity = 0.95
 # background-blur = true
 
-# Cleaner title bar: tabs sit inside it (`tabs`) or drop it entirely (`hidden`).
-# macos-titlebar-style = tabs
+# Drop the title bar entirely. Tabs already live in it (see Window section),
+# so this trades the tab bar away for a few more pixels.
+# macos-titlebar-style = hidden
 
 # Dim the inactive side of a split so the focused one stands out more.
+# Does nothing here: splits are tmux's job (tmux/tmux.conf), not Ghostty's.
 # unfocused-split-opacity = 0.85
 
 # Turn off JetBrains Mono's programming ligatures (-> stays two glyphs).
 # font-feature = -calt,-liga,-dlig
 
-# Thicker glyph rendering; helps on non-Retina external displays.
+# Thicker glyph rendering; helps on non-Retina external displays. This machine
+# is Retina-only, so it buys nothing until an external monitor shows up.
 # font-thicken = true
