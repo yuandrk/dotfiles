@@ -69,7 +69,10 @@ create_symlink() {
 
     mkdir -p "$(dirname "$target")"
     backup_file "$target"
-    ln -sf "$source" "$target"
+    # -n is essential: without it, re-running the installer on a directory
+    # symlink follows the link and creates a nested copy inside it
+    # (e.g. ~/.config/nvim/nvim) instead of replacing the link.
+    ln -sfn "$source" "$target"
     print_success "Linked $target -> $source"
 }
 
