@@ -24,6 +24,26 @@
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
+│ ZMX - PERSISTENT SESSIONS  (tmux only for panes/splits)                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ zmx attach <name>            Attach, creating if needed (prompt: [name])    │
+│ ctrl+\                       Detach - the session keeps running             │
+│ zmx ls                       List sessions                                  │
+│ zmx kill <name>...           Kill session(s)                                │
+│ zmx attach <name> btop       Session that runs a program                    │
+│                                                                             │
+│ Scripts / agents (never `attach` from a script):                            │
+│ zmx run <name> -d <cmd>      Run in background, return at once              │
+│ zmx wait <name>              Block until done, returns the exit code        │
+│ zmx tail <name>              Follow output live                             │
+│ zmx history <name> | tail    Read scrollback                                │
+│ zmx send <name> <text>       Type into the session (append \r to run)       │
+│                                                                             │
+│ GOTCHA: zmx quotes every argument, so 'a; b' arrives as ONE word (127):     │
+│   zmx run job -d zsh -c 'a; b'     or     echo 'a; b' | zmx run job         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
 │ KUBERNETES - GET RESOURCES                                                  │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ k               kubectl                  kga             kubectl get all    │
@@ -159,4 +179,4 @@
 ║      Test everything in kind before production!                              ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
-Last Updated: 2025-11-08
+Last Updated: 2026-10-24

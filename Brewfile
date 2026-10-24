@@ -4,12 +4,14 @@
 # --- Taps (must precede the tapped formulae below) ---
 tap "hashicorp/tap"
 tap "fluxcd/tap"
+tap "neurosnap/tap"
 
 # --- Terminal / shell / prompt ---
 cask "ghostty"         # terminal emulator (config in ghostty/config)
 brew "starship"        # cross-shell prompt
 cask "font-jetbrains-mono-nerd-font"  # Nerd Font for Starship glyphs (set in ghostty/config)
-brew "tmux"            # terminal multiplexer
+brew "neurosnap/tap/zmx" # session persistence (attach/detach); no panes
+brew "tmux"            # panes/windows/splits only — sessions use zmx
 brew "neovim"          # editor (LazyVim config in nvim/)
 
 # --- Kubernetes toolkit ---

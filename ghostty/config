@@ -90,8 +90,9 @@ quick-terminal-position = top
 quick-terminal-autohide = true
 
 # --- Shell ---
-# Open a normal login shell; tmux is NOT started automatically. Run `tmux`
-# (or `tmux new -s main` / `tmux a`) manually when you want a session.
+# Open a normal login shell; nothing is started automatically. For a session
+# that survives closing the tab, run `zmx attach <name>` (detach: ctrl+\).
+# Start `tmux` only when you need panes/windows/splits.
 
 # ============================================================================
 # Optional — uncomment to taste

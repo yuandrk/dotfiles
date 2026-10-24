@@ -243,6 +243,29 @@ EOF
     print_success "kind installed"
 }
 
+install_zmx_linux() {
+    print_header "Installing zmx"
+    if command -v zmx &> /dev/null; then
+        print_warning "zmx already installed"; return
+    fi
+    local ZMX_VERSION="0.8.1"
+    local arch
+    case "$(uname -m)" in
+        x86_64)        arch="x86_64" ;;
+        aarch64|arm64) arch="aarch64" ;;
+        *) print_warning "No zmx release for $(uname -m), skipping"; return ;;
+    esac
+    local tarball="zmx-${ZMX_VERSION}-linux-${arch}.tar.gz"
+    mkdir -p "$HOME/.local/bin"
+    cd /tmp
+    curl -LO "https://zmx.sh/a/${tarball}"
+    tar xzf "$tarball" zmx
+    rm "$tarball"
+    mv zmx "$HOME/.local/bin/"
+    cd - > /dev/null
+    print_success "zmx installed"
+}
+
 install_neovim_linux() {
     print_header "Installing Neovim"
     if command -v nvim &> /dev/null; then
@@ -292,6 +315,7 @@ check_docker_linux() {
 install_linux_tools() {
     install_starship_linux
     install_neovim_linux
+    install_zmx_linux
     install_kubectl_linux
     install_kubectx_kubens_linux
     install_k9s_linux
@@ -309,7 +333,7 @@ show_banner() {
 ╔═══════════════════════════════════════════════════════════════╗
 ║                   DOTFILES INSTALLATION                       ║
 ║                                                               ║
-║  Zsh + Tmux + Starship + Neovim + Kubernetes Tools            ║
+║  Zsh + zmx + Tmux + Starship + Neovim + Kubernetes Tools      ║
 ╚═══════════════════════════════════════════════════════════════╝
 EOF
     echo -e "${NC}"
@@ -345,7 +369,7 @@ main() {
             if ask_yes_no "Install dotfiles (.zshrc, .tmux.conf, nvim, etc.)?" "y"; then
                 install_dotfiles
             fi
-            if ask_yes_no "Install tools (Starship, Neovim, Kubernetes toolkit)?" "y"; then
+            if ask_yes_no "Install tools (Starship, Neovim, zmx, Kubernetes toolkit)?" "y"; then
                 install_tools
             fi
             ;;

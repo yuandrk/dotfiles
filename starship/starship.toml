@@ -1,4 +1,5 @@
 format = """
+${env_var.ZMX_SESSION}\
 [](#9A348E)\
 $os\
 $username\
@@ -30,7 +31,12 @@ $time\
 # Disable the blank line at the start of the prompt
 # add_newline = false
 
-# You can also replace your username with a neat symbol like   or disable this
+# Active zmx session — zmx sets ZMX_SESSION inside a session; hidden otherwise
+[env_var.ZMX_SESSION]
+format = '[\[$env_value\]]($style) '
+style = "bold fg:#9A348E"
+
+# You can also replace your username with a neat symbol like  or disable this
 # and use the os module below
 [username]
 show_always = true

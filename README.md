@@ -2,7 +2,7 @@
 
 My personal dotfiles for a powerful, consistent shell environment across Linux and macOS.
 
-**Zsh (+ Bash) + Tmux + Neovim (LazyVim) + Starship Prompt + Kubernetes Toolkit**
+**Zsh (+ Bash) + zmx + Tmux + Neovim (LazyVim) + Starship Prompt + Kubernetes Toolkit**
 
 > On **macOS** the install is Homebrew-first and targets the default **zsh** shell.
 > On **Linux** it falls back to curl-based installs and keeps the bash config.
@@ -27,7 +27,13 @@ My personal dotfiles for a powerful, consistent shell environment across Linux a
 - JetBrainsMono Nerd Font preset for Starship glyphs
 - Color scheme ported directly from the previous iTerm2 profile
 
-### 🖥️ Tmux Terminal Multiplexer
+### 📌 zmx Session Persistence
+- **Detach/reattach**: `zmx attach <name>` creates or rejoins a session; `ctrl+\` detaches
+- **Scriptable**: `zmx run` / `send` / `history` / `wait` for background jobs and agents
+- **Prompt indicator**: Starship shows `[name]` while inside a session
+- No panes or windows — that's still tmux's job
+
+### 🖥️ Tmux (panes, windows, splits)
 - **Ctrl-a prefix**: Screen-like keybindings
 - **Mouse support**: Easy pane/window selection and resizing
 - **Vim-style navigation**: Navigate panes with hjkl
@@ -236,15 +242,27 @@ jk                      # Exit insert mode
 cat ~/.config/nvim/README.md  # Full guide
 ```
 
+### zmx (sessions)
+
+```bash
+zmx attach <name>         # Attach, creating if needed (detach: ctrl+\)
+zmx ls                    # List sessions
+zmx kill <name>           # Kill session
+zmx run <name> -d <cmd>   # Run a command without attaching
+zmx wait <name>           # Wait for a detached run to finish
+zmx history <name> | tail -100   # Scrollback (`zmx tail <name>` to follow)
+zmx send <name> <text>    # Raw input to the PTY (append \r to execute)
+
+# zmx quotes every argument: 'a; b' arrives as one word (exit 127). Instead:
+zmx run job -d zsh -c 'a; b'     # or: echo 'a; b' | zmx run job
+```
+
 ### Tmux
 
 ```bash
-# Sessions
-tmux                    # Start new session
+# Only when you need panes/windows/splits — plain sessions use zmx (above)
 tmux new -s <name>      # Start named session
-tmux ls                 # List sessions
 tmux attach -t <name>   # Attach to session
-tmux kill-session -t <name>  # Kill session
 
 # Keybindings (prefix = Ctrl-a)
 Ctrl-a |                # Split vertically
@@ -389,6 +407,7 @@ source ~/.zshrc
 | [Neovim](https://neovim.io/) | Latest | Modern modal editor |
 | [LazyVim](https://www.lazyvim.org/) | Latest | Neovim distribution |
 | [Starship](https://starship.rs/) | v1.24.0 | Cross-shell prompt |
+| [zmx](https://zmx.sh) | v0.8.1 | Session persistence (attach/detach) |
 | [kubectl](https://kubernetes.io/docs/reference/kubectl/) | v1.34.1 | Kubernetes CLI |
 | [kubectx/kubens](https://github.com/ahmetb/kubectx) | v0.9.5 | Context/namespace switcher |
 | [k9s](https://k9scli.io/) | v0.50.16 | Terminal UI for Kubernetes |
@@ -403,7 +422,7 @@ All tools are installed to `~/.local/bin/` (no sudo required).
 This repository includes [`CLAUDE.md`](CLAUDE.md) at the root, which gives AI coding assistants (Claude Code, GitHub Copilot, etc.) the context they need for this environment.
 
 Key points:
-- macOS on Apple Silicon; zsh + Ghostty + tmux + Starship + LazyVim
+- macOS on Apple Silicon; zsh + Ghostty + zmx (sessions) + tmux (splits) + Starship + LazyVim
 - Files in `$HOME` are symlinks into this repo — editing them edits the repo
 - Machine-specific shell config belongs in `~/.zshrc.d/`, never in `zsh/zshrc`
 - Many custom aliases and functions are available; kind is preferred for local k8s testing
