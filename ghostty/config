@@ -49,9 +49,11 @@ window-padding-balance = true
 confirm-close-surface = false
 # Restore windows/tabs (and their working directories) after a quit or restart.
 window-save-state = always
-# Tabs sit inside the title bar rather than in a strip below it — one less row
-# of chrome, which is worth having on a 13" laptop display.
-macos-titlebar-style = tabs
+# Tabs-in-titlebar stays off: on macOS 26 with Ghostty 1.3.1, opening a second
+# tab collapsed the tab bar to a lone "⌘2" pill, and the docs warn this style
+# doesn't restore tabs reliably with window-save-state. The default
+# (`transparent`) keeps tabs in a normal strip below the title bar.
+# macos-titlebar-style = tabs
 
 # --- Behavior ---
 copy-on-select = clipboard
@@ -106,8 +108,7 @@ quick-terminal-autohide = true
 # background-opacity = 0.95
 # background-blur = true
 
-# Drop the title bar entirely. Tabs already live in it (see Window section),
-# so this trades the tab bar away for a few more pixels.
+# Drop the title bar entirely for a few more pixels; the tab strip stays.
 # macos-titlebar-style = hidden
 
 # Dim the inactive side of a split so the focused one stands out more.
