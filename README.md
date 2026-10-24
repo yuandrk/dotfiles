@@ -59,7 +59,6 @@ My personal dotfiles for a powerful, consistent shell environment across Linux a
 
 ### ☸️ Kubernetes Toolkit
 - **kubectl** with full bash completion
-- **kubectx/kubens** for fast context/namespace switching
 - **k9s** terminal UI for cluster management
 - **kind** for local Kubernetes testing
 - **60+ kubectl aliases** and helper functions
@@ -108,7 +107,7 @@ dotfiles/
 - **git** (for cloning this repo)
 - **macOS:** [Homebrew](https://brew.sh) — the installer offers to install it for you if missing
 - **Linux:** `curl` (tools are downloaded directly)
-- **Docker engine** (optional, for kind — `colima` on macOS, or Docker Desktop)
+- **Docker engine** (optional, for kind — Docker Desktop on macOS)
 
 ### Installation (macOS)
 
@@ -188,12 +187,11 @@ kshell <pod>    # Open shell in pod
 kbash <pod>     # Open bash in pod
 
 # Context & Namespace
-kctx            # Switch context (kubectx)
-kns             # Switch namespace (kubens)
+kgc             # List contexts
+kcc             # Current context
 
 # Helper Functions
 kgpw <pattern>  # Find pods by name
-kwp             # Watch pods
 kevents         # Get events sorted by time
 kpf <pod> <port> # Port forward
 ktop            # Resource usage
@@ -409,7 +407,6 @@ source ~/.zshrc
 | [Starship](https://starship.rs/) | v1.24.0 | Cross-shell prompt |
 | [zmx](https://zmx.sh) | v0.8.1 | Session persistence (attach/detach) |
 | [kubectl](https://kubernetes.io/docs/reference/kubectl/) | v1.34.1 | Kubernetes CLI |
-| [kubectx/kubens](https://github.com/ahmetb/kubectx) | v0.9.5 | Context/namespace switcher |
 | [k9s](https://k9scli.io/) | v0.50.16 | Terminal UI for Kubernetes |
 | [kind](https://kind.sigs.k8s.io/) | v0.26.0 | Kubernetes in Docker |
 
@@ -492,7 +489,6 @@ MIT License - Feel free to use and modify!
 - [Neovim](https://neovim.io/) - Hyperextensible Vim-based text editor
 - [LazyVim](https://www.lazyvim.org/) - Excellent Neovim starter configuration
 - [Starship](https://starship.rs/) - Amazing prompt
-- [kubectx/kubens](https://github.com/ahmetb/kubectx) - Essential kubectl tools
 - [k9s](https://k9scli.io/) - Best k8s TUI
 - [kind](https://kind.sigs.k8s.io/) - Local k8s testing
 

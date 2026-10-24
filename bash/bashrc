@@ -184,8 +184,6 @@ alias kap='kubectl apply -f'
 alias kdelp='kubectl delete pod'
 
 # Context and namespace shortcuts
-alias kctx='kubectx'
-alias kns='kubens'
 alias kgc='kubectl config get-contexts'
 alias kcc='kubectl config current-context'
 
@@ -220,11 +218,6 @@ kbash() {
 # Get pod by partial name
 kgpw() {
     kubectl get pods | grep -i "$1"
-}
-
-# Watch pods
-kwp() {
-    watch -n 2 kubectl get pods
 }
 
 # Get events sorted by time

@@ -80,7 +80,6 @@ grep -A 5 "kind-new" ~/docs/setup/QUICK_REFERENCE.md
 
 ### ✅ Kubernetes Tools
 - kubectl v1.34.1 with full completion
-- kubectx/kubens for fast switching
 - k9s terminal UI
 - kind for local clusters
 

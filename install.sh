@@ -153,10 +153,9 @@ install_macos_tools() {
     print_success "Homebrew tools installed"
 
     print_header "Container runtime for kind"
-    print_warning "kind needs a Docker engine. Using colima (installed above):"
-    echo "    colima start              # start the Docker VM"
-    echo "    docker ps                 # verify it works"
-    echo "  Or install Docker Desktop instead."
+    print_warning "kind needs a Docker engine. Use Docker Desktop (not in the Brewfile):"
+    echo "    brew install --cask docker-desktop   # if it isn't installed yet"
+    echo "    docker ps                            # verify it works"
 }
 
 # ============================================================================
@@ -183,19 +182,6 @@ install_kubectl_linux() {
     chmod +x kubectl
     mv kubectl "$HOME/.local/bin/"
     print_success "kubectl installed"
-}
-
-install_kubectx_kubens_linux() {
-    print_header "Installing kubectx and kubens"
-    if command -v kubectx &> /dev/null && command -v kubens &> /dev/null; then
-        print_warning "kubectx and kubens already installed"; return
-    fi
-    mkdir -p "$HOME/.local/bin"
-    curl -LO https://github.com/ahmetb/kubectx/releases/download/v0.9.5/kubectx
-    curl -LO https://github.com/ahmetb/kubectx/releases/download/v0.9.5/kubens
-    chmod +x kubectx kubens
-    mv kubectx kubens "$HOME/.local/bin/"
-    print_success "kubectx and kubens installed"
 }
 
 install_k9s_linux() {
@@ -317,7 +303,6 @@ install_linux_tools() {
     install_neovim_linux
     install_zmx_linux
     install_kubectl_linux
-    install_kubectx_kubens_linux
     install_k9s_linux
     install_kind_linux
     check_docker_linux || true
@@ -386,7 +371,7 @@ main() {
     echo "Next steps:"
     echo "  1. Open a new terminal tab to load the prompt and aliases"
     echo "  2. Launch 'nvim' once so LazyVim installs its plugins"
-    echo "  3. For kind: start a Docker engine (colima start) and run 'kind-new'"
+    echo "  3. For kind: start Docker (Docker Desktop on macOS) and run 'kind-new'"
     echo
     echo -e "${GREEN}Enjoy your enhanced development environment!${NC}"
 }

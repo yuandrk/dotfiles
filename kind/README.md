@@ -125,6 +125,6 @@ kind delete cluster --name learning
 ## Tips
 
 - kind clusters use kubeconfig contexts named `kind-<cluster-name>`
-- Use `kubectx` to switch between kind clusters and real clusters
+- Switch between kind clusters and real clusters with `kind-use <name>` or `kubectl config use-context`
 - kind is perfect for CI/CD pipelines and local development
 - Each kind cluster runs in Docker containers (visible with `docker ps`)

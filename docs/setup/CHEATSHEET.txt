@@ -59,8 +59,8 @@
 │ kl <pod>        logs                     kap <file>      apply -f           │
 │ klf <pod>       logs -f (follow)         kdel <res>      delete resource    │
 │ kdp <pod>       describe pod             kdelp <pod>     delete pod         │
-│ kds <svc>       describe service         kctx            switch context     │
-│ kdd <dep>       describe deployment      kns             switch namespace   │
+│ kds <svc>       describe service                                            │
+│ kdd <dep>       describe deployment                                         │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -69,7 +69,6 @@
 │ kshell <pod> [container]     Open shell in pod                             │
 │ kbash <pod> [container]      Open bash in pod                              │
 │ kgpw <pattern>               Find pods by name                             │
-│ kwp                          Watch pods (refresh 2s)                       │
 │ kevents                      Get events sorted by time                     │
 │ kpf <pod> <port>             Port forward to pod                           │
 │ ktop [pods|nodes]            Resource usage                                │
@@ -143,7 +142,7 @@
 │ TROUBLESHOOTING                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ source ~/.zshrc              Reload zsh config                             │
-│ kctx                         Check/switch context                          │
+│ kcc                          Show current context                          │
 │ kgc                          List all contexts                             │
 │ docker ps                    Check running containers                      │
 │ kind get clusters            List kind clusters                            │

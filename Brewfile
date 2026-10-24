@@ -16,16 +16,12 @@ brew "neovim"          # editor (LazyVim config in nvim/)
 
 # --- Kubernetes toolkit ---
 brew "kubernetes-cli"  # provides `kubectl`
-brew "kubectx"         # provides `kubectx` and `kubens`
 brew "k9s"             # cluster TUI
 brew "kind"            # local Kubernetes in Docker
-brew "watch"           # used by the `kwp` helper (not built into macOS)
 
-# --- Container runtime for kind (pick one) ---
-brew "colima"          # lightweight Docker runtime, no Docker Desktop needed
-brew "docker"          # docker CLI (talks to colima)
-# Alternative: comment the two lines above and use Docker Desktop instead:
-# cask "docker"
+# --- Container runtime for kind ---
+# Docker Desktop, installed manually (/Applications/Docker.app); it ships the
+# docker CLI in ~/.docker/bin. On a fresh Mac:  brew install --cask docker-desktop
 
 # --- 1Password ---
 cask "1password-cli"   # `op` CLI: secrets, SSH agent, shell plugins
@@ -42,18 +38,26 @@ brew "helm"            # Kubernetes package manager
 brew "fluxcd/tap/flux" # GitOps CLI
 brew "sops"            # encrypted secrets in git
 brew "age"             # modern encryption backend for sops
+brew "terraform-docs"  # generate docs for Terraform modules
+# tflint is not in Homebrew — standalone binary in ~/.local/bin
+# (https://github.com/terraform-linters/tflint/releases)
+
+# --- Networking ---
+brew "cloudflared"     # Cloudflare Tunnel client
 
 # --- CLI utilities ---
 brew "yq"              # jq for YAML (jq itself ships with macOS at /usr/bin/jq)
 brew "ripgrep"         # `rg` — used by LazyVim/telescope and Claude Code search
 brew "btop"            # resource monitor
+brew "ffmpeg"          # audio/video conversion
+brew "mole"            # macOS cleanup (`mole` / `mo`)
+brew "syncthing"       # file sync; runs as a service (brew services start syncthing)
 
 # --- Languages / runtimes ---
 brew "node"
 brew "uv"              # Python package/venv manager
 
 # --- AI coding tools ---
-cask "codex"
 # Claude Code is NOT installed via brew — it self-installs to ~/.local/bin/claude
 # and self-updates. Config lives in claude/ (see CLAUDE.md).
 

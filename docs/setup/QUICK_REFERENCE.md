@@ -84,8 +84,6 @@ kdelp           # kubectl delete pod
 
 ### Context & Namespace
 ```bash
-kctx            # kubectx (switch context)
-kns             # kubens (switch namespace)
 kgc             # kubectl config get-contexts
 kcc             # kubectl config current-context
 ```
@@ -99,7 +97,6 @@ kbash <pod> [container]            # Open bash in pod
 
 # Pod Operations
 kgpw <pattern>                     # Find pods by name pattern
-kwp                                # Watch pods (refreshes every 2s)
 kevents                            # Get events sorted by time
 
 # Port Forwarding
@@ -324,8 +321,6 @@ k9s
 ```
 ~/.local/bin/starship              # All tools installed here
 ~/.local/bin/kubectl
-~/.local/bin/kubectx
-~/.local/bin/kubens
 ~/.local/bin/k9s
 ~/.local/bin/kind
 ```
@@ -349,7 +344,7 @@ k top pods --sort-by=cpu
 k top pods --sort-by=memory
 
 # Watch pod creation
-watch -n 1 kubectl get pods
+k get pods -w
 
 # Get events for a pod
 k get events --field-selector involvedObject.name=<pod-name>
@@ -420,7 +415,6 @@ newgrp docker
 k cluster-info
 k config view
 k config get-contexts
-kctx  # List and switch contexts
 ```
 
 ### kind Issues
@@ -437,13 +431,11 @@ kind delete clusters --all         # Nuclear option
 1. **Use tab completion**: All kubectl commands have completion enabled
 2. **Use k9s for exploration**: Visual interface is great for learning
 3. **Test in kind first**: Always test deployments locally before production
-4. **Use kubectx/kubens**: Fast context/namespace switching
-5. **Watch with kwp**: Better than `watch kubectl get pods`
-6. **Filter k9s output**: Use `/` in k9s to filter resources
-7. **Use kgpw for search**: Find pods by partial name
-8. **Check Starship**: It shows your k8s context, no need to guess
-9. **Use helper functions**: They save typing and are tested
-10. **Read the logs with klf**: Follow mode is your friend
+4. **Filter k9s output**: Use `/` in k9s to filter resources
+5. **Use kgpw for search**: Find pods by partial name
+6. **Check Starship**: It shows your k8s context, no need to guess
+7. **Use helper functions**: They save typing and are tested
+8. **Read the logs with klf**: Follow mode is your friend
 
 ---
 
