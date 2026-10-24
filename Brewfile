@@ -13,15 +13,18 @@ cask "font-jetbrains-mono-nerd-font"  # Nerd Font for Starship glyphs (set in gh
 brew "neurosnap/tap/zmx" # session persistence (attach/detach); no panes
 brew "tmux"            # panes/windows/splits only — sessions use zmx
 brew "neovim"          # editor (LazyVim config in nvim/)
+cask "visual-studio-code"  # GUI editor; cask also puts the `code` CLI on PATH
 
 # --- Kubernetes toolkit ---
 brew "kubernetes-cli"  # provides `kubectl`
 brew "k9s"             # cluster TUI
-brew "kind"            # local Kubernetes in Docker
+# kind is not installed by default; the kind-* helpers in zshrc need:  brew install kind
 
-# --- Container runtime for kind ---
+# --- Container runtime ---
 # Docker Desktop, installed manually (/Applications/Docker.app); it ships the
 # docker CLI in ~/.docker/bin. On a fresh Mac:  brew install --cask docker-desktop
+# Its installer appends PATH/completion lines to ~/.zprofile and ~/.zshrc —
+# move them to ~/.zshrc.d/docker.zsh (see CLAUDE.md).
 
 # --- 1Password ---
 cask "1password-cli"   # `op` CLI: secrets, SSH agent, shell plugins
