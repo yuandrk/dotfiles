@@ -42,9 +42,45 @@ setopt INTERACTIVE_COMMENTS    # allow # comments in interactive shell
 # KEY BINDINGS
 # ============================================================================
 
-# Emacs line editing: Ctrl-A / Ctrl-E, Alt-B / Alt-F (see ghostty/config).
+# Line editing behaves like bash on a stock Linux box (readline + /etc/inputrc);
+# bash itself gets the same keys from bash/inputrc. Ghostty's macOS keys feed
+# into these (cmd+left -> ^A, opt+left -> alt-b, ...), see ghostty/config.
 # Must be explicit — with EDITOR=nvim zsh silently starts in vi mode instead.
 bindkey -e
+
+# Word = letters and digits only, as in readline: alt-b / alt-f / alt-backspace
+# stop at / . - _ (zsh default treats a whole path as one word)
+WORDCHARS=''
+
+bindkey '^U' backward-kill-line         # Ctrl-U: delete to line start (zsh default: whole line)
+bindkey '^[f' emacs-forward-word        # Alt-F: to the END of the word, as in bash
+
+# Ctrl-W: delete back to the previous space (bash's unix-word-rubout)
+autoload -Uz backward-kill-word-match
+zle -N unix-word-rubout backward-kill-word-match
+zstyle ':zle:unix-word-rubout' word-style whitespace
+bindkey '^W' unix-word-rubout
+
+# Home / End / Delete, in both normal and application cursor modes
+bindkey '^[[H'  beginning-of-line
+bindkey '^[OH'  beginning-of-line
+bindkey '^[[1~' beginning-of-line
+bindkey '^[[F'  end-of-line
+bindkey '^[OF'  end-of-line
+bindkey '^[[4~' end-of-line
+bindkey '^[[3~' delete-char
+
+# Ctrl-Left/Right and Alt-Left/Right: word jump (on macOS, Ctrl-arrows only
+# arrive if Mission Control's "Move left/right a space" shortcuts are off)
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' emacs-forward-word
+bindkey '^[[1;3D' backward-word
+bindkey '^[[1;3C' emacs-forward-word
+
+# Ctrl-X Ctrl-E: edit the command line in $EDITOR, like bash
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
 
 # ============================================================================
 # COMPLETION

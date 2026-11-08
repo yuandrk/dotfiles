@@ -5,7 +5,7 @@ Context for AI assistants working in this repository and on this machine.
 ## What this repo is
 
 Personal dotfiles, symlinked into place by `install.sh`. The repo is the source of
-truth: `~/.zshrc`, `~/.config/nvim` and friends are all symlinks
+truth: `~/.zshrc`, `~/.inputrc`, `~/.config/nvim` and friends are all symlinks
 pointing back here. **Editing the file in `$HOME` edits the repo.**
 
 ## Environment
@@ -19,6 +19,7 @@ pointing back here. **Editing the file in `$HOME` edits the repo.**
 | Prompt | Starship (`starship/starship.toml`) |
 | Sessions | zmx (`zmx attach <name>`, detach `ctrl+\`), **not** auto-started; prompt shows `[name]` |
 | Splits/tabs | Ghostty's own (`cmd+d`, `cmd+shift+d`, `cmd+t`) — no tmux |
+| Line editing | emacs/readline keys, same as bash on Linux (`zsh/zshrc` KEY BINDINGS + `bash/inputrc`) |
 | Editor | Neovim + LazyVim (`$EDITOR=nvim`) |
 | Package manager | Homebrew at **`/opt/homebrew`** (Apple Silicon path) |
 
@@ -36,6 +37,7 @@ you find in old docs or git history.
 zsh/zshrc          -> ~/.zshrc          aliases, functions, k8s + kind helpers
 zsh/zprofile       -> ~/.zprofile       login shell: brew shellenv, PATH
 bash/              -> ~/.bashrc etc.    kept for Linux / bash sessions only
+bash/inputrc       -> ~/.inputrc        readline keys (Home/End/Delete, word jump)
 starship/          -> ~/.config/starship.toml
 ghostty/           -> ~/.config/ghostty
 nvim/              -> ~/.config/nvim    LazyVim; lazy-lock.json is the plugin lockfile

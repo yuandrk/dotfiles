@@ -1,0 +1,28 @@
+# ~/.inputrc — readline keys for bash (and any other readline program).
+# Same behaviour as a stock Linux box; zsh/zshrc mirrors it for zsh.
+
+# Linux: keep the distro defaults (a personal ~/.inputrc otherwise replaces
+# /etc/inputrc entirely). The file doesn't exist on macOS.
+$include /etc/inputrc
+
+set editing-mode emacs
+
+# 8-bit / UTF-8 input and output (Cyrillic etc.), as Debian's /etc/inputrc
+set input-meta on
+set output-meta on
+set convert-meta off
+
+# Home / End / Delete, in both normal and application cursor modes
+"\e[H": beginning-of-line
+"\eOH": beginning-of-line
+"\e[1~": beginning-of-line
+"\e[F": end-of-line
+"\eOF": end-of-line
+"\e[4~": end-of-line
+"\e[3~": delete-char
+
+# Ctrl-Left/Right and Alt-Left/Right: word jump
+"\e[1;5D": backward-word
+"\e[1;5C": forward-word
+"\e[1;3D": backward-word
+"\e[1;3C": forward-word

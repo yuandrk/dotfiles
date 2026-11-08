@@ -90,6 +90,7 @@ install_dotfiles() {
     # Bash (kept for Linux / `bash` sessions)
     create_symlink "$DOTFILES_DIR/bash/bashrc" "$HOME/.bashrc"
     create_symlink "$DOTFILES_DIR/bash/bash_profile" "$HOME/.bash_profile"
+    create_symlink "$DOTFILES_DIR/bash/inputrc" "$HOME/.inputrc"  # readline keys, like stock Linux
 
     # Starship
     mkdir -p "$HOME/.config"
@@ -348,7 +349,7 @@ main() {
             install_dotfiles
             ;;
         *)
-            if ask_yes_no "Install dotfiles (.zshrc, nvim, etc.)?" "y"; then
+            if ask_yes_no "Install dotfiles (.zshrc, .inputrc, nvim, etc.)?" "y"; then
                 install_dotfiles
             fi
             if ask_yes_no "Install tools (Starship, Neovim, zmx, Kubernetes toolkit)?" "y"; then
