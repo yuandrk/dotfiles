@@ -39,6 +39,14 @@ setopt NO_CASE_GLOB            # case-insensitive globbing
 setopt INTERACTIVE_COMMENTS    # allow # comments in interactive shell
 
 # ============================================================================
+# KEY BINDINGS
+# ============================================================================
+
+# Emacs line editing: Ctrl-A / Ctrl-E, Alt-B / Alt-F (see ghostty/config).
+# Must be explicit — with EDITOR=nvim zsh silently starts in vi mode instead.
+bindkey -e
+
+# ============================================================================
 # COMPLETION
 # ============================================================================
 
