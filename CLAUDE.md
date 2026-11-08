@@ -5,7 +5,7 @@ Context for AI assistants working in this repository and on this machine.
 ## What this repo is
 
 Personal dotfiles, symlinked into place by `install.sh`. The repo is the source of
-truth: `~/.zshrc`, `~/.tmux.conf`, `~/.config/nvim` and friends are all symlinks
+truth: `~/.zshrc`, `~/.config/nvim` and friends are all symlinks
 pointing back here. **Editing the file in `$HOME` edits the repo.**
 
 ## Environment
@@ -18,7 +18,7 @@ pointing back here. **Editing the file in `$HOME` edits the repo.**
 | Terminal | Ghostty 1.3.1, `TERM=xterm-ghostty` |
 | Prompt | Starship (`starship/starship.toml`) |
 | Sessions | zmx (`zmx attach <name>`, detach `ctrl+\`), **not** auto-started; prompt shows `[name]` |
-| Multiplexer | tmux, prefix `C-a`, **not** auto-started — only for panes/windows/splits |
+| Splits/tabs | Ghostty's own (`cmd+d`, `cmd+shift+d`, `cmd+t`) — no tmux |
 | Editor | Neovim + LazyVim (`$EDITOR=nvim`) |
 | Package manager | Homebrew at **`/opt/homebrew`** (Apple Silicon path) |
 
@@ -36,7 +36,6 @@ you find in old docs or git history.
 zsh/zshrc          -> ~/.zshrc          aliases, functions, k8s + kind helpers
 zsh/zprofile       -> ~/.zprofile       login shell: brew shellenv, PATH
 bash/              -> ~/.bashrc etc.    kept for Linux / bash sessions only
-tmux/tmux.conf     -> ~/.tmux.conf
 starship/          -> ~/.config/starship.toml
 ghostty/           -> ~/.config/ghostty
 nvim/              -> ~/.config/nvim    LazyVim; lazy-lock.json is the plugin lockfile
@@ -65,14 +64,14 @@ covered by `.gitignore`. Never symlink or commit the whole `~/.claude` directory
 next machine, add it to the matching section. Claude Code is the exception — it installs
 itself to `~/.local/bin/claude` and self-updates, so it is not a brew package.
 
-**Persistent processes use zmx, not tmux.** From scripts or agents, start them with
+**Persistent processes use zmx (tmux is not installed).** From scripts or agents, start them with
 `zmx run <name> -d <cmd>` and follow up with `zmx wait` / `zmx history` — never
 `zmx attach` from non-interactive code. zmx quotes every argument itself, so a compound
 command must go through `zmx run <name> -d zsh -c '…'` or stdin (`echo '…' | zmx run
 <name>`) — `zmx run x -d 'a; b'` arrives as one word and fails with exit 127. A session
 inherits the creator's environment, including `$SHELL`. Nested sessions are unsupported: inside one
 (`$ZMX_SESSION` is set) use `zmx run`, or `env -u ZMX_SESSION zmx attach …` if you
-truly must. tmux stays installed only for panes/windows/splits.
+truly must.
 
 ## Conventions
 

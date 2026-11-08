@@ -66,17 +66,19 @@ shell-integration = zsh
 shell-integration-features = cursor,title,path,sudo,ssh-env,ssh-terminfo
 
 # --- macOS keyboard ---
-# Treat LEFT Option as Alt so Alt-based bindings reach the shell and tmux:
-# zsh word motion (alt+b / alt+f) and tmux pane switching (tmux/tmux.conf).
-# Right Option keeps its normal macOS behaviour for typing special characters.
+# Treat LEFT Option as Alt so Alt-based shell keys work (alt+b / alt+f / alt+d,
+# alt+backspace, alt+.). Right Option keeps its normal macOS behaviour for
+# typing special characters.
 macos-option-as-alt = left
 
-# Ghostty binds alt+arrow_left/right to esc:b / esc:f by DEFAULT, which eats the
-# keys before tmux sees them, so `bind -n M-Left select-pane -L` never fires.
-# (M-Up/M-Down always worked — Ghostty binds no default there.) Unbind both to
-# hand the keys back to tmux; zsh word motion still works via alt+b / alt+f.
-keybind = alt+arrow_left=unbind
-keybind = alt+arrow_right=unbind
+# Ghostty defaults this config relies on (nothing to set — just don't unbind):
+#   opt+left / opt+right    word jump (sent as alt+b / alt+f)
+#   cmd+left / cmd+right    start / end of line (sent as ctrl+a / ctrl+e)
+#   cmd+backspace           delete to start of line (sent as ctrl+u)
+#   cmd+t / cmd+w           new tab / close
+#   cmd+d / cmd+shift+d     split right / split down
+#   cmd+alt+arrows          move between splits;  cmd+ctrl+arrows  resize
+# Shell-side line editing (zsh/zshrc, bash/inputrc) matches bash on Linux.
 
 # --- Updates ---
 # Ghostty is installed via Homebrew (Brewfile), so let brew do the upgrading;
@@ -94,7 +96,7 @@ quick-terminal-autohide = true
 # --- Shell ---
 # Open a normal login shell; nothing is started automatically. For a session
 # that survives closing the tab, run `zmx attach <name>` (detach: ctrl+\).
-# Start `tmux` only when you need panes/windows/splits.
+# Splits and tabs are Ghostty's own (cmd+d, cmd+shift+d, cmd+t).
 
 # ============================================================================
 # Optional — uncomment to taste
@@ -112,7 +114,6 @@ quick-terminal-autohide = true
 # macos-titlebar-style = hidden
 
 # Dim the inactive side of a split so the focused one stands out more.
-# Does nothing here: splits are tmux's job (tmux/tmux.conf), not Ghostty's.
 # unfocused-split-opacity = 0.85
 
 # Turn off JetBrains Mono's programming ligatures (-> stays two glyphs).

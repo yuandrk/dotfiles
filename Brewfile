@@ -10,8 +10,7 @@ tap "neurosnap/tap"
 cask "ghostty"         # terminal emulator (config in ghostty/config)
 brew "starship"        # cross-shell prompt
 cask "font-jetbrains-mono-nerd-font"  # Nerd Font for Starship glyphs (set in ghostty/config)
-brew "neurosnap/tap/zmx" # session persistence (attach/detach); no panes
-brew "tmux"            # panes/windows/splits only — sessions use zmx
+brew "neurosnap/tap/zmx" # session persistence (attach/detach); splits/tabs are Ghostty's
 brew "neovim"          # editor (LazyVim config in nvim/)
 cask "visual-studio-code"  # GUI editor; cask also puts the `code` CLI on PATH
 

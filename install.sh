@@ -91,9 +91,6 @@ install_dotfiles() {
     create_symlink "$DOTFILES_DIR/bash/bashrc" "$HOME/.bashrc"
     create_symlink "$DOTFILES_DIR/bash/bash_profile" "$HOME/.bash_profile"
 
-    # Tmux
-    create_symlink "$DOTFILES_DIR/tmux/tmux.conf" "$HOME/.tmux.conf"
-
     # Starship
     mkdir -p "$HOME/.config"
     create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
@@ -318,7 +315,7 @@ show_banner() {
 ╔═══════════════════════════════════════════════════════════════╗
 ║                   DOTFILES INSTALLATION                       ║
 ║                                                               ║
-║  Zsh + zmx + Tmux + Starship + Neovim + Kubernetes Tools      ║
+║  Zsh + zmx + Starship + Neovim + Kubernetes Tools             ║
 ╚═══════════════════════════════════════════════════════════════╝
 EOF
     echo -e "${NC}"
@@ -351,7 +348,7 @@ main() {
             install_dotfiles
             ;;
         *)
-            if ask_yes_no "Install dotfiles (.zshrc, .tmux.conf, nvim, etc.)?" "y"; then
+            if ask_yes_no "Install dotfiles (.zshrc, nvim, etc.)?" "y"; then
                 install_dotfiles
             fi
             if ask_yes_no "Install tools (Starship, Neovim, zmx, Kubernetes toolkit)?" "y"; then

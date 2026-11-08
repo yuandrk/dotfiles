@@ -24,7 +24,7 @@
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ ZMX - PERSISTENT SESSIONS  (tmux only for panes/splits)                     │
+│ ZMX - PERSISTENT SESSIONS                                                   │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ zmx attach <name>            Attach, creating if needed (prompt: [name])    │
 │ ctrl+\                       Detach - the session keeps running             │
