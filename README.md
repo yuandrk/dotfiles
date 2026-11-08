@@ -1,503 +1,124 @@
-# 🚀 Dotfiles
+# Dotfiles
 
-My personal dotfiles for a powerful, consistent shell environment across Linux and macOS.
+Personal shell setup for macOS (Apple Silicon), with a Linux fallback:
+**zsh + Ghostty + zmx + Starship + Neovim (LazyVim) + a Kubernetes toolkit.**
+Everything in `$HOME` is a symlink back into this repo, so editing `~/.zshrc` edits the repo.
 
-**Zsh (+ Bash) + zmx + Tmux + Neovim (LazyVim) + Starship Prompt + Kubernetes Toolkit**
+## What's inside
 
-> On **macOS** the install is Homebrew-first and targets the default **zsh** shell.
-> On **Linux** it falls back to curl-based installs and keeps the bash config.
+| Path | Linked to | What it does |
+|---|---|---|
+| `zsh/zshrc` | `~/.zshrc` | aliases, functions, key bindings, k8s + kind helpers |
+| `zsh/zprofile` | `~/.zprofile` | login shell: Homebrew env, PATH |
+| `bash/bashrc`, `bash/bash_profile` | `~/.bashrc`, `~/.bash_profile` | bash on Linux / `bash` sessions |
+| `bash/inputrc` | `~/.inputrc` | readline keys for bash (Home/End/Delete, word jump) |
+| `ghostty/` | `~/.config/ghostty` | terminal: font, colours, key notes |
+| `starship/starship.toml` | `~/.config/starship.toml` | prompt: git, k8s context, `[zmx session]` |
+| `nvim/` | `~/.config/nvim` | LazyVim; notes in [`nvim/README.md`](nvim/README.md) |
+| `kind/` | `~/.config/kind` | kind cluster templates; see [`kind/README.md`](kind/README.md) |
+| `claude/` | `~/.claude/settings.json`, `statusline-command.sh` | Claude Code settings + status line (files only) |
+| `docs/setup/` | `~/docs/setup` | [`CHEATSHEET.txt`](docs/setup/CHEATSHEET.txt) — every alias and key on one page |
+| `Brewfile` | | every tool, installed with `brew bundle` |
+| `install.sh` | | symlinks + tool install |
+| `CLAUDE.md` | | context and rules for AI assistants |
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey.svg)
-
----
-
-## ✨ Features
-
-### 🐚 Enhanced Bash
-- **Smart History**: 10,000 commands with timestamps, no duplicates
-- **Auto-correction**: Typo correction for paths and commands
-- **60+ Aliases**: Shortcuts for common operations (git, kubectl, navigation)
-- **20+ Functions**: Useful helpers (mkcd, extract, kubernetes shortcuts)
-- **Cross-platform**: Works on both Linux and macOS
-
-### 👻 Ghostty Terminal
-- Fast, GPU-accelerated terminal emulator (replaces a manually-configured iTerm2)
-- Config tracked at `ghostty/config`, symlinked to `~/.config/ghostty/config`
-- JetBrainsMono Nerd Font preset for Starship glyphs
-- Color scheme ported directly from the previous iTerm2 profile
-
-### 📌 zmx Session Persistence
-- **Detach/reattach**: `zmx attach <name>` creates or rejoins a session; `ctrl+\` detaches
-- **Scriptable**: `zmx run` / `send` / `history` / `wait` for background jobs and agents
-- **Prompt indicator**: Starship shows `[name]` while inside a session
-- No panes or windows — that's still tmux's job
-
-### 🖥️ Tmux (panes, windows, splits)
-- **Ctrl-a prefix**: Screen-like keybindings
-- **Mouse support**: Easy pane/window selection and resizing
-- **Vim-style navigation**: Navigate panes with hjkl
-- **Intuitive splits**: | for vertical, - for horizontal
-- **Modern status bar**: Clean design with session info and time
-- **Smart copy mode**: Vim keybindings for text selection
-
-### 🎨 Starship Prompt
-- Beautiful, fast, and informative prompt
-- Shows: git status, k8s context, language versions, execution time
-- Pastel Powerline theme
-- Highly customizable
-
-### ⚡ Neovim with LazyVim
-- **Modern IDE-like experience**: LSP, autocompletion, syntax highlighting
-- **LazyVim**: Pre-configured with sensible defaults and 40+ plugins
-- **Treesitter**: Advanced syntax highlighting and code understanding
-- **Telescope**: Fuzzy finder for files, text, and more
-- **Neo-tree**: File explorer with git integration
-- **LazyGit**: Git integration directly in Neovim
-- **Easy customization**: Add your own plugins in lua/plugins/
-- **Fast startup**: Lazy-loaded plugins for optimal performance
-
-### ☸️ Kubernetes Toolkit
-- **kubectl** with full bash completion
-- **k9s** terminal UI for cluster management
-- **kind** for local Kubernetes testing
-- **60+ kubectl aliases** and helper functions
-
-### 📦 What's Included
-
-```
-dotfiles/
-├── zsh/
-│   ├── zshrc               # Main zsh configuration (macOS default)
-│   └── zprofile            # Login shell: Homebrew env + PATH
-├── bash/
-│   ├── bashrc              # Bash configuration (Linux / `bash` sessions)
-│   └── bash_profile        # Bash profile
-├── Brewfile                # macOS tool list (brew bundle)
-├── tmux/
-│   └── tmux.conf           # Tmux configuration
-├── nvim/
-│   ├── init.lua            # Neovim entry point
-│   ├── lua/
-│   │   ├── config/         # Options, keymaps, autocmds
-│   │   └── plugins/        # Custom plugins
-│   └── README.md           # Neovim documentation
-├── starship/
-│   └── starship.toml       # Starship prompt config
-├── kind/
-│   ├── simple-cluster.yaml
-│   ├── multi-node-cluster.yaml
-│   ├── advanced-cluster.yaml
-│   └── README.md
-├── docs/
-│   └── setup/
-│       ├── QUICK_REFERENCE.md   # Command reference
-│       ├── NVIM_GUIDE.md        # Neovim / LazyVim guide
-│       └── CHEATSHEET.txt       # Printable cheatsheet
-├── install.sh              # Installation script
-├── .gitignore              # Protects secrets
-└── README.md               # This file
-```
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-- **git** (for cloning this repo)
-- **macOS:** [Homebrew](https://brew.sh) — the installer offers to install it for you if missing
-- **Linux:** `curl` (tools are downloaded directly)
-- **Docker engine** (optional, for kind — Docker Desktop on macOS)
-
-### Installation (macOS)
+## Install
 
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
-
-# Run the installer (installs Homebrew if needed, then everything via brew bundle)
+git clone https://github.com/yuandrk/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-./install.sh
-
-# Open a new terminal, or reload the shell
-source ~/.zshrc
+./install.sh              # interactive
+./install.sh --all        # everything, no prompts
+./install.sh --minimal    # symlinks only, skip tools
 ```
 
-Or install just the tools yourself:
+- **macOS**: installs Homebrew if missing, then everything in the `Brewfile`.
+  Docker Desktop is installed by hand (`brew install --cask docker-desktop`).
+- **Linux**: downloads the tools with curl into `~/.local/bin`; the bash config is used.
+- Existing real files are backed up as `*.backup.<timestamp>`; existing symlinks are replaced.
+- **Update**: `git pull && ./install.sh --minimal`, then open a new tab.
+- **Machine-specific config** goes in `~/.zshrc.d/*.zsh` (sourced last, not tracked) —
+  never in `zsh/zshrc`. Installers that append `export PATH=…` to `~/.zshrc` or
+  `~/.zprofile` are editing this public repo; move those lines there.
+
+## Keys
+
+Line editing works the same as bash on a stock Linux box — in zsh (`KEY BINDINGS` in
+`zsh/zshrc`) and in bash (`bash/inputrc`).
+
+| Key | Action |
+|---|---|
+| `Ctrl-A` / `Ctrl-E` | start / end of line — also `Cmd-←` / `Cmd-→` and Home / End (`Fn-←` / `Fn-→`) |
+| `Opt-←` / `Opt-→` | word back / forward (same as `Alt-B` / `Alt-F`) |
+| `Ctrl-W` | delete back to the previous space |
+| `Opt-Backspace` | delete one word back — stops at `/ . - _` |
+| `Ctrl-U` / `Ctrl-K` | delete to start / end of line (`Cmd-Backspace` = `Ctrl-U`) |
+| `Ctrl-Y` | paste back what was deleted |
+| `Ctrl-R` | search history |
+| `Alt-.` | last argument of the previous command |
+| `Ctrl-X Ctrl-E` | edit the command in `$EDITOR` (nvim) |
+
+`Ctrl-←` / `Ctrl-→` are bound for word jumps too, but macOS gives them to Mission Control
+unless *Keyboard → Shortcuts → Mission Control → Move left/right a space* is turned off.
+
+Ghostty handles tabs and splits itself — there is no tmux:
+
+| Key | Action |
+|---|---|
+| `Cmd-T` / `Cmd-W` | new tab / close |
+| `Cmd-1` … `Cmd-9` | go to tab |
+| `Cmd-D` / `Cmd-Shift-D` | split right / down |
+| `Cmd-Alt-arrows` | move between splits (`Cmd-Ctrl-arrows` resizes) |
+| `Cmd-K` | clear screen |
+| `` Cmd-` `` | drop-down terminal, from any app |
+
+## Sessions: zmx
+
+A [zmx](https://zmx.sh) session keeps running after you close the tab; the prompt shows `[name]` inside one.
 
 ```bash
-brew bundle --file=~/dotfiles/Brewfile
-```
-
-The installer will:
-1. Back up any existing real dotfiles (`.zshrc.backup.TIMESTAMP`) — existing symlinks are replaced silently
-2. Symlink `.zshrc`, `.zprofile`, `.tmux.conf`, nvim, starship, kind configs into place
-3. On macOS, install all tools via Homebrew (`Brewfile`); on Linux, download them with curl
-4. Set up documentation
-
-### Installation Options
-
-```bash
-./install.sh              # Interactive (recommended)
-./install.sh --all        # Install everything without prompts
-./install.sh --minimal    # Only install dotfiles, skip tools
-```
-
----
-
-## 📚 Quick Reference
-
-### Shell Aliases
-
-```bash
-# Navigation
-..              # cd ..
-...             # cd ../..
-ll              # ls -lh (detailed)
-la              # ls -lhA (include hidden)
-
-# Git
-gs              # git status
-ga              # git add
-gc              # git commit
-gp              # git push
-gl              # git log --graph
-
-# Utilities
-mkcd <dir>      # Create directory and cd into it
-extract <file>  # Auto-extract any archive
-ff <pattern>    # Find files
-path            # Show PATH nicely
-```
-
-### Kubernetes Aliases
-
-```bash
-# Basic
-k               # kubectl
-kgp             # kubectl get pods
-kgs             # kubectl get svc
-kgd             # kubectl get deployments
-kgn             # kubectl get nodes
-
-# Logs & Debug
-kl <pod>        # kubectl logs
-klf <pod>       # kubectl logs -f (follow)
-kshell <pod>    # Open shell in pod
-kbash <pod>     # Open bash in pod
-
-# Context & Namespace
-kgc             # List contexts
-kcc             # Current context
-
-# Helper Functions
-kgpw <pattern>  # Find pods by name
-kevents         # Get events sorted by time
-kpf <pod> <port> # Port forward
-ktop            # Resource usage
-```
-
-### kind (Local Kubernetes)
-
-```bash
-kind-new <name>         # Create cluster
-kind-multi [name]       # Create multi-node cluster
-kind-with-ports [name]  # Create cluster with port mappings
-kind-list               # List all clusters
-kind-clean              # Delete all clusters
-kind-img <image>        # Load Docker image into cluster
-```
-
-### Neovim (LazyVim)
-
-```bash
-# Launch
-nvim                    # Start Neovim
-nvim <file>             # Open file
-
-# Essential Keybindings (Leader = Space)
-Space-e                 # Toggle file explorer
-Space-ff                # Find files
-Space-fg                # Find text (grep)
-Space-Space             # Command palette
-Space-w                 # Save file
-Ctrl-s                  # Save file (insert/normal mode)
-Space-qq                # Quit all
-
-# Window/Buffer Management
-Space-sv                # Split vertically
-Space-sh                # Split horizontally
-Shift-h                 # Previous buffer
-Shift-l                 # Next buffer
-jk                      # Exit insert mode
-
-# Plugin Management
-:Lazy                   # Open plugin manager
-:LazyExtras             # Browse language support extras
-:Mason                  # LSP/formatter/linter installer
-
-# Documentation
-cat ~/.config/nvim/README.md  # Full guide
-```
-
-### zmx (sessions)
-
-```bash
-zmx attach <name>         # Attach, creating if needed (detach: ctrl+\)
-zmx ls                    # List sessions
-zmx kill <name>           # Kill session
-zmx run <name> -d <cmd>   # Run a command without attaching
-zmx wait <name>           # Wait for a detached run to finish
-zmx history <name> | tail -100   # Scrollback (`zmx tail <name>` to follow)
-zmx send <name> <text>    # Raw input to the PTY (append \r to execute)
+zmx attach <name>         # attach, creating it if needed (detach: ctrl+\)
+zmx ls                    # list sessions
+zmx kill <name>           # kill a session
+zmx run <name> -d <cmd>   # run a command without attaching (scripts, agents)
+zmx wait <name>           # wait for a detached run; returns its exit code
+zmx history <name> | tail -100   # scrollback (`zmx tail <name>` to follow)
+zmx send <name> <text>    # raw input to the session (append \r to run it)
 
 # zmx quotes every argument: 'a; b' arrives as one word (exit 127). Instead:
 zmx run job -d zsh -c 'a; b'     # or: echo 'a; b' | zmx run job
 ```
 
-### Tmux
+Never `zmx attach` from a script. Inside a session use `zmx run`, or
+`env -u ZMX_SESSION zmx attach …` if you really need to nest.
+
+## Shell shortcuts
 
 ```bash
-# Only when you need panes/windows/splits — plain sessions use zmx (above)
-tmux new -s <name>      # Start named session
-tmux attach -t <name>   # Attach to session
-
-# Keybindings (prefix = Ctrl-a)
-Ctrl-a |                # Split vertically
-Ctrl-a -                # Split horizontally
-Ctrl-a h/j/k/l          # Navigate panes (vim-style)
-Alt-Arrow               # Navigate panes (arrow keys)
-Ctrl-a H/J/K/L          # Resize panes
-Ctrl-a c                # New window
-Shift-Left/Right        # Switch windows
-Ctrl-a d                # Detach from session
-Ctrl-a [                # Enter copy mode (vim keys)
-Ctrl-a S                # Sync panes (broadcast to all)
-Ctrl-a ?                # Show all keybindings
+.. / ... / ....        # cd up 1 / 2 / 3
+ll / la                # ls -lh / ls -lhA
+gs ga gc gp gl gd      # git status / add / commit / push / log --graph / diff
+mkcd <dir>             # mkdir + cd
+extract <file>         # unpack any archive
+ff / ffd <pattern>     # find files / directories by name
+k                      # kubectl — plus ~20 k* aliases, k* helpers and kind-* helpers
 ```
 
----
+The full list lives in the cheatsheet: `cat ~/docs/setup/CHEATSHEET.txt`.
 
-## 📖 Documentation
+## Neovim
 
-- **[CLAUDE.md](CLAUDE.md)** - Environment overview, repo layout and conventions
-- **[QUICK_REFERENCE.md](docs/setup/QUICK_REFERENCE.md)** - Command reference
-- **[NVIM_GUIDE.md](docs/setup/NVIM_GUIDE.md)** - Neovim / LazyVim guide
-- **[CHEATSHEET.txt](docs/setup/CHEATSHEET.txt)** - Printable cheatsheet
+LazyVim with a few extras (see [`nvim/README.md`](nvim/README.md)). Press `Space` and wait:
+which-key lists every mapping, and `Space s k` searches them. `:Lazy` manages plugins,
+`:LazyExtras` adds language support, `:Mason` installs LSPs and formatters.
+Local additions: `jk` leaves insert mode, `Ctrl-S` saves.
 
-Quick access:
-```bash
-cat ~/docs/setup/QUICK_REFERENCE.md
-cat ~/docs/setup/CHEATSHEET.txt
-```
+## Security
 
----
+This repo is public: no secrets, tokens, kubeconfigs or real hostnames. `.gitignore`
+covers the usual suspects, and only two files under `~/.claude` are tracked. Check
+`git diff --cached` before every commit.
 
-## 🎯 Common Workflows
+## License
 
-### Learning Kubernetes with kind
-
-```bash
-# Create a learning cluster
-kind-new learning
-
-# Deploy something
-k create deployment nginx --image=nginx
-k expose deployment nginx --port=80
-
-# Explore with k9s
-k9s
-
-# Clean up
-kind delete cluster --name learning
-```
-
-### Testing Kubernetes Manifests
-
-```bash
-# Create test cluster
-kind-new test
-
-# Apply manifests
-k apply -f deployment.yaml
-
-# Check status
-kgp
-klf <pod-name>
-
-# Debug
-k9s
-
-# Clean up
-kind delete cluster --name test
-```
-
----
-
-## 🔧 Customization
-
-### Bashrc
-Edit `bash/bashrc` to add your own aliases and functions.
-
-### Neovim
-Add custom plugins in `nvim/lua/plugins/`:
-
-```lua
--- nvim/lua/plugins/mycustom.lua
-return {
-  {
-    "plugin-author/plugin-name",
-    opts = {
-      -- configuration
-    },
-  },
-}
-```
-
-Full customization guide: `cat ~/.config/nvim/README.md`
-
-### Starship Prompt
-Edit `starship/starship.toml` or try different presets:
-
-```bash
-starship preset --list
-starship preset <preset-name> -o ~/.config/starship.toml
-```
-
-### kind Configs
-Add your own cluster configs to `kind/` directory and use with:
-
-```bash
-kind create cluster --config ~/dotfiles/kind/my-config.yaml
-```
-
----
-
-## 🌍 Multi-Machine Setup
-
-### Syncing to Another Machine
-
-```bash
-# On the new machine
-git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-./install.sh
-```
-
-That's it! The installer handles platform differences (Linux vs macOS).
-
-### Updating
-
-```bash
-cd ~/dotfiles
-git pull
-./install.sh --minimal  # Re-link dotfiles
-source ~/.zshrc
-```
-
----
-
-## 🛠️ Tools Installed
-
-| Tool | Version | Purpose |
-|------|---------|---------|
-| [Ghostty](https://ghostty.org/) | Latest | GPU-accelerated terminal emulator |
-| [Neovim](https://neovim.io/) | Latest | Modern modal editor |
-| [LazyVim](https://www.lazyvim.org/) | Latest | Neovim distribution |
-| [Starship](https://starship.rs/) | v1.24.0 | Cross-shell prompt |
-| [zmx](https://zmx.sh) | v0.8.1 | Session persistence (attach/detach) |
-| [kubectl](https://kubernetes.io/docs/reference/kubectl/) | v1.34.1 | Kubernetes CLI |
-| [k9s](https://k9scli.io/) | v0.50.16 | Terminal UI for Kubernetes |
-| [kind](https://kind.sigs.k8s.io/) | v0.26.0 | Kubernetes in Docker |
-
-All tools are installed to `~/.local/bin/` (no sudo required).
-
----
-
-## 🤝 For AI Assistants
-
-This repository includes [`CLAUDE.md`](CLAUDE.md) at the root, which gives AI coding assistants (Claude Code, GitHub Copilot, etc.) the context they need for this environment.
-
-Key points:
-- macOS on Apple Silicon; zsh + Ghostty + zmx (sessions) + tmux (splits) + Starship + LazyVim
-- Files in `$HOME` are symlinks into this repo — editing them edits the repo
-- Machine-specific shell config belongs in `~/.zshrc.d/`, never in `zsh/zshrc`
-- Many custom aliases and functions are available; kind is preferred for local k8s testing
-
----
-
-## 🔒 Security
-
-This repository is designed to be **public-safe**:
-- Comprehensive `.gitignore` to prevent secret commits
-- No SSH keys, credentials, or tokens
-- No sensitive kubeconfig data
-- Local machine-specific configs excluded
-
-**Before committing changes:**
-```bash
-# Check for potential secrets
-grep -r "password\|token\|secret\|key" . --exclude-dir=.git
-
-# Review what will be committed
-git diff --cached
-```
-
----
-
-## 🐛 Troubleshooting
-
-### Dotfiles not loading
-```bash
-source ~/.zshrc   # bash: source ~/.bashrc
-```
-
-### kubectl completion not working
-```bash
-source <(kubectl completion zsh)   # bash: kubectl completion bash
-```
-
-### kind can't connect to Docker
-```bash
-# Check Docker
-docker ps
-
-# Add user to docker group (Linux)
-sudo usermod -aG docker $USER
-newgrp docker
-```
-
-### Starship not showing
-```bash
-# Check installation
-which starship
-
-# Reload
-source ~/.bashrc
-```
-
----
-
-## 📝 License
-
-MIT License - Feel free to use and modify!
-
----
-
-## 🙏 Acknowledgments
-
-- [Neovim](https://neovim.io/) - Hyperextensible Vim-based text editor
-- [LazyVim](https://www.lazyvim.org/) - Excellent Neovim starter configuration
-- [Starship](https://starship.rs/) - Amazing prompt
-- [k9s](https://k9scli.io/) - Best k8s TUI
-- [kind](https://kind.sigs.k8s.io/) - Local k8s testing
-
----
-
-## 📬 Contact
-
-Feel free to open issues or submit PRs!
-
----
-
-**Happy coding! 🚀**
+MIT

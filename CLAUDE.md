@@ -43,7 +43,7 @@ ghostty/           -> ~/.config/ghostty
 nvim/              -> ~/.config/nvim    LazyVim; lazy-lock.json is the plugin lockfile
 kind/              -> ~/.config/kind    cluster manifests
 claude/            -> ~/.claude/*       settings.json + statusline-command.sh (files only)
-docs/setup/        -> ~/docs/setup      cheatsheets and nvim guide
+docs/setup/        -> ~/docs/setup      CHEATSHEET.txt (all aliases + keys on one page)
 Brewfile                                everything installed via `brew bundle`
 install.sh                              symlinks + tool install
 ```

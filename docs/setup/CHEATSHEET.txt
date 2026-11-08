@@ -1,7 +1,7 @@
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║                         BASH & KUBERNETES CHEATSHEET                          ║
-║                              yuandrk@macbook                                   ║
-╚═══════════════════════════════════════════════════════════════════════════════╝
+╔═════════════════════════════════════════════════════════════════════════════╗
+║                        SHELL & KUBERNETES CHEATSHEET                        ║
+║             zsh / bash  ·  Ghostty  ·  zmx  ·  kubectl  ·  kind             ║
+╚═════════════════════════════════════════════════════════════════════════════╝
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ NAVIGATION & FILES                                                          │
@@ -12,7 +12,25 @@
 │ ll              ls -lh detailed          nowdate         Current date       │
 │                                                                             │
 │ mkcd <dir>      Create dir and cd        extract <file>  Auto-extract       │
-│ ff <pattern>    Find files               fd <pattern>    Find directories   │
+│ ff <pattern>    Find files               ffd <pattern>   Find directories   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ KEYS - SHELL + GHOSTTY  (line editing = bash on Linux)                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Ctrl-A / Ctrl-E         Start / end of line    (Cmd-Left / Cmd-Right too)   │
+│ Home / End              Start / end of line    (Fn-Left / Fn-Right)         │
+│ Opt-Left / Opt-Right    Word back / forward    (= Alt-B / Alt-F)            │
+│ Ctrl-W                  Delete back to previous space                       │
+│ Opt-Backspace           Delete word back (stops at / . - _)                 │
+│ Ctrl-U / Ctrl-K         Delete to start / end of line  (Cmd-Backspace = ^U) │
+│ Ctrl-Y                  Paste back what was deleted                         │
+│ Ctrl-R                  Search history          Alt-.   Last argument       │
+│ Ctrl-X Ctrl-E           Edit the command in nvim                            │
+│                                                                             │
+│ Cmd-T / Cmd-W           New tab / close         Cmd-1..9  Go to tab         │
+│ Cmd-D / Cmd-Shift-D     Split right / down      Cmd-Alt-arrows  Move        │
+│ Cmd-K                   Clear screen            Cmd-`  Drop-down terminal   │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -66,46 +84,46 @@
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ KUBERNETES - HELPER FUNCTIONS                                               │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ kshell <pod> [container]     Open shell in pod                             │
-│ kbash <pod> [container]      Open bash in pod                              │
-│ kgpw <pattern>               Find pods by name                             │
-│ kevents                      Get events sorted by time                     │
-│ kpf <pod> <port>             Port forward to pod                           │
-│ ktop [pods|nodes]            Resource usage                                │
-│ krestart <deployment>        Restart deployment                            │
+│ kshell <pod> [container]     Open shell in pod                              │
+│ kbash <pod> [container]      Open bash in pod                               │
+│ kgpw <pattern>               Find pods by name                              │
+│ kevents                      Get events sorted by time                      │
+│ kpf <pod> <port>             Port forward to pod                            │
+│ ktop [pods|nodes]            Resource usage                                 │
+│ krestart <deployment>        Restart deployment                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ KIND - LOCAL KUBERNETES                                                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ kind-new <name>              Create cluster                                │
-│ kind-multi [name]            Create multi-node (1 cp + 2 workers)          │
-│ kind-with-ports [name]       Create with ports (80, 443, 30000)            │
-│ kind-list                    List all clusters                             │
-│ kind-clean                   Delete ALL clusters                           │
-│ kind-use <name>              Switch to cluster context                     │
-│ kind-img <image> [cluster]   Load Docker image into cluster                │
-│ kind-nodes [cluster]         Show nodes in cluster                         │
+│ kind-new <name>              Create cluster                                 │
+│ kind-multi [name]            Create multi-node (1 cp + 2 workers)           │
+│ kind-with-ports [name]       Create with ports (80, 443, 30000)             │
+│ kind-list                    List all clusters                              │
+│ kind-clean                   Delete ALL clusters                            │
+│ kind-use <name>              Switch to cluster context                      │
+│ kind-img <image> [cluster]   Load Docker image into cluster                 │
+│ kind-nodes [cluster]         Show nodes in cluster                          │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ K9S - TERMINAL UI                                                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ k9s                          Launch k9s                                     │
-│ k9s -n <namespace>           Launch in namespace                           │
+│ k9s -n <namespace>           Launch in namespace                            │
 │                                                                             │
 │ Inside k9s:                                                                 │
-│   :          Command mode        0          Show pods                      │
-│   /          Filter              d          Describe                       │
-│   ?          Help                l          Logs                           │
-│   Ctrl+a     All namespaces      Ctrl+d     Delete                         │
+│   :          Command mode        0          Show pods                       │
+│   /          Filter              d          Describe                        │
+│   ?          Help                l          Logs                            │
+│   Ctrl+a     All namespaces      Ctrl+d     Delete                          │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ COMMON WORKFLOWS                                                            │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ LEARNING K8S:                                                               │
-│   kind-new learning          # Create cluster                              │
+│   kind-new learning          # Create cluster                               │
 │   k create deployment nginx --image=nginx                                   │
 │   k expose deployment nginx --port=80                                       │
 │   kgp                        # Check pods                                   │
@@ -113,7 +131,7 @@
 │   kind delete cluster --name learning                                       │
 │                                                                             │
 │ TESTING MANIFESTS:                                                          │
-│   kind-new test              # Create test cluster                         │
+│   kind-new test              # Create test cluster                          │
 │   k apply -f deployment.yaml                                                │
 │   kgp                        # Check status                                 │
 │   klf <pod>                  # Check logs                                   │
@@ -131,51 +149,53 @@
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ USEFUL ONE-LINERS                                                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ k get pods --sort-by='.status.containerStatuses[0].restartCount'           │
+│ k get pods --sort-by='.status.containerStatuses[0].restartCount'            │
 │ k top pods --sort-by=cpu                                                    │
 │ k top pods --sort-by=memory                                                 │
-│ k get events --field-selector involvedObject.name=<pod>                    │
-│ k get pods -o wide           # Show which node                             │
+│ k get events --field-selector involvedObject.name=<pod>                     │
+│ k get pods -o wide           # Show which node                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ TROUBLESHOOTING                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ source ~/.zshrc              Reload zsh config                             │
-│ kcc                          Show current context                          │
-│ kgc                          List all contexts                             │
-│ docker ps                    Check running containers                      │
-│ kind get clusters            List kind clusters                            │
-│ k cluster-info               Check cluster connection                      │
+│ source ~/.zshrc              Reload zsh config                              │
+│ kcc                          Show current context                           │
+│ kgc                          List all contexts                              │
+│ docker ps                    Check running containers                       │
+│ kind get clusters            List kind clusters                             │
+│ k cluster-info               Check cluster connection                       │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ FILE LOCATIONS                                                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ ~/.zshrc                                 Main zsh config                   │
-│ ~/.config/starship.toml                  Starship prompt config            │
-│ ~/.config/kind/*.yaml                    kind cluster templates            │
-│ ~/docs/setup/QUICK_REFERENCE.md          Detailed command reference        │
-│ ~/.local/bin/                            All installed tools               │
+│ ~/.zshrc                                 Main zsh config                    │
+│ ~/.zshrc.d/*.zsh                         Local zsh config, untracked        │
+│ ~/.inputrc                               Readline keys for bash             │
+│ ~/.config/ghostty/config                 Terminal config + key notes        │
+│ ~/.config/starship.toml                  Starship prompt config             │
+│ ~/.config/kind/*.yaml                    kind cluster templates             │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ DOCUMENTATION                                                               │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ cat ~/docs/setup/QUICK_REFERENCE.md      Command reference                 │
-│ cat ~/.config/kind/README.md             kind examples                     │
+│ README.md in the dotfiles repo           Overview, install, keys            │
+│ cat ~/.config/nvim/README.md             Neovim / LazyVim notes             │
+│ cat ~/.config/kind/README.md             kind examples                      │
 │                                                                             │
 │ External:                                                                   │
-│   https://kubernetes.io/docs/reference/kubectl/cheatsheet/                 │
+│   https://kubernetes.io/docs/reference/kubectl/cheatsheet/                  │
 │   https://kind.sigs.k8s.io/                                                 │
 │   https://k9scli.io/                                                        │
 │   https://starship.rs/                                                      │
 └─────────────────────────────────────────────────────────────────────────────┘
 
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║ TIP: Your Starship prompt shows: git branch, k8s context, language versions  ║
-║      Use tab completion for kubectl - it's fully enabled!                    ║
-║      Test everything in kind before production!                              ║
-╚═══════════════════════════════════════════════════════════════════════════════╝
+╔═════════════════════════════════════════════════════════════════════════════╗
+║ TIP: The Starship prompt shows git branch, k8s context, [zmx session]       ║
+║      Tab completion works for kubectl and the k alias                       ║
+║      Test in kind before production                                         ║
+╚═════════════════════════════════════════════════════════════════════════════╝
 
-Last Updated: 2026-10-24
+Last Updated: 2026-11-08
