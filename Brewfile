@@ -17,6 +17,7 @@ cask "visual-studio-code"  # GUI editor; cask also puts the `code` CLI on PATH
 # --- Kubernetes toolkit ---
 brew "kubernetes-cli"  # provides `kubectl`
 brew "k9s"             # cluster TUI
+brew "kind"            # local clusters in Docker, for practice (needs Docker Desktop)
 
 # --- Container runtime ---
 # Docker Desktop, installed manually (/Applications/Docker.app); it ships the
