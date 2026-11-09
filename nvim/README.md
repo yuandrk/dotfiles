@@ -38,40 +38,28 @@ LazyVim comes with many features out of the box:
 - **Terminal**: Toggleable terminal
 - **Beautiful UI**: Modern colorscheme and UI components
 
-## Default Keybindings
+## Keybindings
 
-### General
-- Leader key: `<Space>`
-- Local leader: `\`
-- Exit insert mode: `jk`
-- Clear search highlights: `<leader>nh`
-- Save file: `<Ctrl-s>`
-- Quit all: `<leader>qq`
+Leader is `<Space>`. Press it and wait — which-key lists every mapping;
+`<leader>sk` searches them. Full list: https://www.lazyvim.org/keymaps
 
-### Window Management
-- Split vertically: `<leader>sv`
-- Split horizontally: `<leader>sh`
-- Equal size splits: `<leader>se`
-- Close split: `<leader>sx`
+Common LazyVim defaults:
 
-### Buffer Navigation
-- Next buffer: `<Shift-l>` or `]b`
-- Previous buffer: `<Shift-h>` or `[b`
-
-### Tab Management
-- New tab: `<leader>to`
-- Close tab: `<leader>tx`
-- Next tab: `<leader>tn`
-- Previous tab: `<leader>tp`
-
-### LazyVim Keybindings
-For a complete list of LazyVim keybindings, see: https://www.lazyvim.org/keymaps
-
-Some common ones:
 - File explorer: `<leader>e`
-- Find files: `<leader>ff`
-- Find text: `<leader>fg`
-- Command palette: `<leader><Space>`
+- Find files: `<leader>ff` · grep in project: `<leader>/`
+- Next / previous buffer: `<Shift-l>` / `<Shift-h>`
+- Split right / below: `<leader>|` / `<leader>-`
+- Save: `<Ctrl-s>` · quit all: `<leader>qq`
+
+Local additions (`lua/config/keymaps.lua`):
+
+- `jk` — leave insert mode
+- `<Ctrl-d>` / `<Ctrl-u>` — page down / up, cursor stays centred
+- `J` / `K` in visual mode — move the selection down / up
+- `p` in visual mode — paste without overwriting the yank
+
+Trailing whitespace is stripped on save, except in Markdown and diffs
+(`lua/config/autocmds.lua`).
 
 ## Customization
 

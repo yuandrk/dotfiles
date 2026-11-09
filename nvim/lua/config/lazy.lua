@@ -31,8 +31,3 @@ require("lazy").setup({
     },
   },
 })
-
--- Load additional config
-require("config.options")
-require("config.keymaps")
-require("config.autocmds")
