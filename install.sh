@@ -99,16 +99,18 @@ install_dotfiles() {
     # Ghostty terminal
     create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
 
-    # kind configs
-    create_symlink "$DOTFILES_DIR/kind" "$HOME/.config/kind"
-
     # Neovim
     create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 
     # Claude Code — link individual files only. ~/.claude also holds credentials
     # and session state, which must never be symlinked into a public repo.
+    # settings.json is copied once, not linked: Claude Code writes machine-local
+    # (and sometimes private) settings into it.
     mkdir -p "$HOME/.claude"
-    create_symlink "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
+    if [ ! -e "$HOME/.claude/settings.json" ]; then
+        cp "$DOTFILES_DIR/claude/settings.example.json" "$HOME/.claude/settings.json"
+        print_success "Created ~/.claude/settings.json from settings.example.json"
+    fi
     create_symlink "$DOTFILES_DIR/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
 
     # Documentation
@@ -149,23 +151,26 @@ install_macos_tools() {
 
     brew bundle --file="$DOTFILES_DIR/Brewfile"
     print_success "Homebrew tools installed"
-
-    print_header "Container runtime for kind"
-    print_warning "kind needs a Docker engine. Use Docker Desktop (not in the Brewfile):"
-    echo "    brew install --cask docker-desktop   # if it isn't installed yet"
-    echo "    docker ps                            # verify it works"
 }
 
 # ============================================================================
 # Linux: curl-based tool installation
 # ============================================================================
 
+# CPU architecture as release files spell it: linux_arch <x86_64-name> <arm64-name>
+linux_arch() {
+    case "$(uname -m)" in
+        x86_64)        echo "$1" ;;
+        aarch64|arm64) echo "$2" ;;
+        *)             return 1 ;;
+    esac
+}
+
 install_starship_linux() {
     print_header "Installing Starship"
     if command -v starship &> /dev/null; then
         print_warning "Starship already installed"; return
     fi
-    mkdir -p "$HOME/.local/bin"
     curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local/bin"
     print_success "Starship installed"
 }
@@ -175,11 +180,11 @@ install_kubectl_linux() {
     if command -v kubectl &> /dev/null; then
         print_warning "kubectl already installed"; return
     fi
-    mkdir -p "$HOME/.local/bin"
-    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-    chmod +x kubectl
-    mv kubectl "$HOME/.local/bin/"
-    print_success "kubectl installed"
+    local arch; arch="$(linux_arch amd64 arm64)" || { print_warning "Unsupported CPU, skipping"; return; }
+    local version; version="$(curl -fsSL https://dl.k8s.io/release/stable.txt)"
+    curl -fsSL -o "$HOME/.local/bin/kubectl" "https://dl.k8s.io/release/${version}/bin/linux/${arch}/kubectl"
+    chmod +x "$HOME/.local/bin/kubectl"
+    print_success "kubectl ${version} installed"
 }
 
 install_k9s_linux() {
@@ -187,44 +192,10 @@ install_k9s_linux() {
     if command -v k9s &> /dev/null; then
         print_warning "k9s already installed"; return
     fi
-    mkdir -p "$HOME/.local/bin"
-    cd /tmp
-    curl -LO https://github.com/derailed/k9s/releases/download/v0.50.16/k9s_Linux_amd64.tar.gz
-    tar xzf k9s_Linux_amd64.tar.gz k9s
-    rm k9s_Linux_amd64.tar.gz
-    mv k9s "$HOME/.local/bin/"
-    cd - > /dev/null
+    local arch; arch="$(linux_arch amd64 arm64)" || { print_warning "Unsupported CPU, skipping"; return; }
+    curl -fsSL "https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_${arch}.tar.gz" \
+        | tar xz -C "$HOME/.local/bin" k9s
     print_success "k9s installed"
-}
-
-install_kind_linux() {
-    print_header "Installing kind"
-    if command -v kind &> /dev/null || [ -f "$HOME/.local/bin/kind-binary" ]; then
-        print_warning "kind already installed"; return
-    fi
-    mkdir -p "$HOME/.local/bin"
-
-    if [ -n "$FLATPAK_ID" ]; then
-        print_warning "Detected flatpak environment - installing with wrapper"
-        curl -Lo "$HOME/.local/bin/kind-binary" https://kind.sigs.k8s.io/dl/v0.26.0/kind-linux-amd64
-        chmod +x "$HOME/.local/bin/kind-binary"
-        cat > "$HOME/.local/bin/kind" << 'EOF'
-#!/usr/bin/env bash
-TEMP_BIN=$(mktemp -d)
-trap "rm -rf $TEMP_BIN" EXIT
-cat > "$TEMP_BIN/docker" << 'DOCKER_WRAPPER'
-#!/usr/bin/env bash
-exec /usr/bin/flatpak-spawn --host docker "$@"
-DOCKER_WRAPPER
-chmod +x "$TEMP_BIN/docker"
-PATH="$TEMP_BIN:$PATH" ~/.local/bin/kind-binary "$@"
-EOF
-        chmod +x "$HOME/.local/bin/kind"
-    else
-        curl -Lo "$HOME/.local/bin/kind" https://kind.sigs.k8s.io/dl/v0.26.0/kind-linux-amd64
-        chmod +x "$HOME/.local/bin/kind"
-    fi
-    print_success "kind installed"
 }
 
 install_zmx_linux() {
@@ -233,21 +204,9 @@ install_zmx_linux() {
         print_warning "zmx already installed"; return
     fi
     local ZMX_VERSION="0.8.1"
-    local arch
-    case "$(uname -m)" in
-        x86_64)        arch="x86_64" ;;
-        aarch64|arm64) arch="aarch64" ;;
-        *) print_warning "No zmx release for $(uname -m), skipping"; return ;;
-    esac
-    local tarball="zmx-${ZMX_VERSION}-linux-${arch}.tar.gz"
-    mkdir -p "$HOME/.local/bin"
-    cd /tmp
-    curl -LO "https://zmx.sh/a/${tarball}"
-    tar xzf "$tarball" zmx
-    rm "$tarball"
-    mv zmx "$HOME/.local/bin/"
-    cd - > /dev/null
-    print_success "zmx installed"
+    local arch; arch="$(linux_arch x86_64 aarch64)" || { print_warning "Unsupported CPU, skipping"; return; }
+    curl -fsSL "https://zmx.sh/a/zmx-${ZMX_VERSION}-linux-${arch}.tar.gz" | tar xz -C "$HOME/.local/bin" zmx
+    print_success "zmx ${ZMX_VERSION} installed"
 }
 
 install_neovim_linux() {
@@ -255,55 +214,24 @@ install_neovim_linux() {
     if command -v nvim &> /dev/null; then
         print_warning "Neovim already installed: $(nvim --version | head -n 1)"; return
     fi
-    mkdir -p "$HOME/.local/bin"
-    local NVIM_VERSION="v0.10.2"
-    cd /tmp
-    rm -f nvim.appimage
-    if command -v wget &> /dev/null; then
-        wget -q --show-progress "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim.appimage"
-    else
-        curl -L "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim.appimage" -o nvim.appimage
-    fi
-    chmod +x nvim.appimage
-    if ./nvim.appimage --version &> /dev/null; then
-        mv nvim.appimage "$HOME/.local/bin/nvim"
-        print_success "Neovim installed (AppImage)"
-    else
-        print_warning "AppImage FUSE not available, extracting instead..."
-        ./nvim.appimage --appimage-extract > /dev/null
-        rm -rf "$HOME/.local/nvim"
-        mv squashfs-root "$HOME/.local/nvim"
-        ln -sf "$HOME/.local/nvim/usr/bin/nvim" "$HOME/.local/bin/nvim"
-        print_success "Neovim installed (extracted)"
-    fi
-    cd - > /dev/null
+    # Latest stable release tarball (LazyVim needs a recent Neovim), unpacked
+    # to ~/.local/nvim-linux-<arch> with a symlink in ~/.local/bin.
+    local arch; arch="$(linux_arch x86_64 arm64)" || { print_warning "Unsupported CPU, skipping"; return; }
+    rm -rf "$HOME/.local/nvim-linux-${arch}"
+    curl -fsSL "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-${arch}.tar.gz" \
+        | tar xz -C "$HOME/.local"
+    ln -sfn "$HOME/.local/nvim-linux-${arch}/bin/nvim" "$HOME/.local/bin/nvim"
+    print_success "Neovim installed: $("$HOME/.local/bin/nvim" --version | head -n 1)"
     print_warning "Note: LazyVim plugins will install on first launch"
 }
 
-check_docker_linux() {
-    print_header "Checking Docker"
-    if ! command -v docker &> /dev/null; then
-        print_warning "Docker not found. kind requires Docker."
-        print_warning "Install: https://docs.docker.com/engine/install/"
-        return 1
-    fi
-    if ! docker ps &> /dev/null; then
-        print_warning "Docker is installed but not accessible. You may need to:"
-        print_warning "  sudo systemctl start docker"
-        print_warning "  sudo usermod -aG docker \$USER  (then log out/in)"
-        return 1
-    fi
-    print_success "Docker is available"
-}
-
 install_linux_tools() {
+    mkdir -p "$HOME/.local/bin"
     install_starship_linux
     install_neovim_linux
     install_zmx_linux
     install_kubectl_linux
     install_k9s_linux
-    install_kind_linux
-    check_docker_linux || true
 }
 
 # ============================================================================
@@ -369,7 +297,6 @@ main() {
     echo "Next steps:"
     echo "  1. Open a new terminal tab to load the prompt and aliases"
     echo "  2. Launch 'nvim' once so LazyVim installs its plugins"
-    echo "  3. For kind: start Docker (Docker Desktop on macOS) and run 'kind-new'"
     echo
     echo -e "${GREEN}Enjoy your enhanced development environment!${NC}"
 }

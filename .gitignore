@@ -58,8 +58,12 @@
 # ============================================================================
 # CLAUDE CODE - never commit credentials or session data
 # ============================================================================
-# Only claude/settings.json and claude/statusline-command.sh are tracked.
+# Only claude/statusline-command.sh is linked into ~/.claude; settings.json is
+# a real file there (seeded once from claude/settings.example.json), because
+# Claude Code writes private, machine-local settings into it.
 # Everything below is machine-local state or secrets.
+
+/claude/settings.json
 
 **/.claude/.credentials.json
 **/.claude/history.jsonl
