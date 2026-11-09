@@ -76,6 +76,21 @@ create_symlink() {
     print_success "Linked $target -> $source"
 }
 
+# Ghostty keeps its terminfo inside the app bundle and points $TERMINFO at it,
+# but only for shells it starts itself. Anything that has TERM=xterm-ghostty
+# without that variable (a zmx session created elsewhere, sudo, a cron job)
+# fails with "Error opening terminal: xterm-ghostty". A copy in ~/.terminfo is
+# found regardless of the environment.
+install_ghostty_terminfo() {
+    local src="/Applications/Ghostty.app/Contents/Resources/terminfo"
+    [ -d "$src" ] || return 0
+    if TERMINFO="$src" infocmp -x xterm-ghostty 2> /dev/null | tic -x -o "$HOME/.terminfo" - 2> /dev/null; then
+        print_success "Installed xterm-ghostty terminfo into ~/.terminfo"
+    else
+        print_warning "Could not install the xterm-ghostty terminfo into ~/.terminfo"
+    fi
+}
+
 # ============================================================================
 # Dotfiles (symlinks)
 # ============================================================================
@@ -98,6 +113,7 @@ install_dotfiles() {
 
     # Ghostty terminal
     create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
+    install_ghostty_terminfo
 
     # Neovim
     create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
