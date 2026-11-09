@@ -1,201 +1,100 @@
 ╔═════════════════════════════════════════════════════════════════════════════╗
-║                        SHELL & KUBERNETES CHEATSHEET                        ║
-║             zsh / bash  ·  Ghostty  ·  zmx  ·  kubectl  ·  kind             ║
+║                             TERMINAL CHEATSHEET                             ║
+║                 zsh  ·  Ghostty  ·  zmx  ·  git  ·  kubectl                 ║
 ╚═════════════════════════════════════════════════════════════════════════════╝
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ NAVIGATION & FILES                                                          │
+│ FILES & NAVIGATION                                                          │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ ..              cd ..                    la              ls -lhA (+ hidden) │
-│ ...             cd ../..                 path            Show PATH nicely   │
-│ ....            cd ../../..              now             Current time       │
-│ ll              ls -lh detailed          nowdate         Current date       │
+│ .. / ... / ....            Up 1 / 2 / 3 directories                         │
+│ ll / la                    List files / including hidden                    │
+│ mkcd <dir>                 Create a directory and cd into it                │
+│ ff / ffd <pattern>         Find files / directories by name                 │
+│ extract <archive>          Unpack tar, gz, bz2, zip                         │
+│ rm / cp / mv               Ask before overwriting or deleting (-i)          │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ LINE EDITING  (same keys as bash on Linux)                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Ctrl-A / Ctrl-E            Start / end of line  (Cmd-Left/Right, Home/End)  │
+│ Opt-Left / Opt-Right       Word back / forward  (= Alt-B / Alt-F)           │
+│ Ctrl-W                     Delete back to the previous space                │
+│ Opt-Backspace              Delete one word back (stops at / . - _)          │
+│ Ctrl-U / Ctrl-K            Delete to start / end of line                    │
+│ Ctrl-Y                     Paste back what was deleted                      │
+│ Ctrl-R                     Search history                                   │
+│ Alt-.                      Last argument of the previous command            │
+│ Ctrl-X Ctrl-E              Edit the command in nvim                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ GHOSTTY  (Cmd-Shift-P lists every action)                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Cmd-T / Cmd-W              New tab / close        Cmd-1..8   Go to tab      │
+│ Cmd-Shift-R                Name the tab                                     │
+│ Cmd-D / Cmd-Shift-D        Split right / down                               │
+│ Cmd-Alt-arrows             Move between splits    Cmd-[ / ]  Prev / next    │
+│ Cmd-Ctrl-arrows            Resize the split       Cmd-Ctrl-= Equalize       │
+│ Cmd-Shift-Enter            Zoom the split to the whole tab, and back        │
+│ Cmd-Up / Cmd-Down          Jump to the previous / next prompt               │
+│ Cmd-F / Cmd-G              Search scrollback / next match                   │
+│ Cmd-Shift-S                Open the whole scrollback as a text file         │
+│ Cmd-K                      Clear the screen       Cmd-Z      Undo close     │
+│ Cmd-`                      Drop-down terminal, from any app                 │
+│ Cmd-Shift-,                Reload the config                                │
 │                                                                             │
-│ mkcd <dir>      Create dir and cd        extract <file>  Auto-extract       │
-│ ff <pattern>    Find files               ffd <pattern>   Find directories   │
+│ Select text = copy. Cmd-click opens a link. A command that ran over 10s     │
+│ sends a notification when it ends, if you were looking elsewhere.           │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ KEYS - SHELL + GHOSTTY  (line editing = bash on Linux)                      │
+│ ZMX - SESSIONS THAT SURVIVE CLOSING THE TAB                                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ Ctrl-A / Ctrl-E         Start / end of line    (Cmd-Left / Cmd-Right too)   │
-│ Home / End              Start / end of line    (Fn-Left / Fn-Right)         │
-│ Opt-Left / Opt-Right    Word back / forward    (= Alt-B / Alt-F)            │
-│ Ctrl-W                  Delete back to previous space                       │
-│ Opt-Backspace           Delete word back (stops at / . - _)                 │
-│ Ctrl-U / Ctrl-K         Delete to start / end of line  (Cmd-Backspace = ^U) │
-│ Ctrl-Y                  Paste back what was deleted                         │
-│ Ctrl-R                  Search history          Alt-.   Last argument       │
-│ Ctrl-X Ctrl-E           Edit the command in nvim                            │
-│                                                                             │
-│ Cmd-T / Cmd-W           New tab / close         Cmd-1..9  Go to tab         │
-│ Cmd-D / Cmd-Shift-D     Split right / down      Cmd-Alt-arrows  Move        │
-│ Cmd-K                   Clear screen            Cmd-`  Drop-down terminal   │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ GIT                                                                         │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ gs              git status               gp              git push           │
-│ ga              git add                  gl              git log --graph    │
-│ gc              git commit               gd              git diff           │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ ZMX - PERSISTENT SESSIONS                                                   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ zmx attach <name>            Attach, creating if needed (prompt: [name])    │
-│ ctrl+\                       Detach - the session keeps running             │
-│ zmx ls                       List sessions                                  │
-│ zmx kill <name>...           Kill session(s)                                │
-│ zmx attach <name> btop       Session that runs a program                    │
+│ zmx attach <name>          Attach, creating if needed (prompt: [name])      │
+│ Ctrl-\                     Detach - the session keeps running               │
+│ zmx ls                     List sessions                                    │
+│ zmx kill <name>...         Kill session(s)                                  │
 │                                                                             │
 │ Scripts / agents (never `attach` from a script):                            │
-│ zmx run <name> -d <cmd>      Run in background, return at once              │
-│ zmx wait <name>              Block until done, returns the exit code        │
-│ zmx tail <name>              Follow output live                             │
-│ zmx history <name> | tail    Read scrollback                                │
-│ zmx send <name> <text>       Type into the session (append \r to run)       │
+│ zmx run <name> -d <cmd>    Run in the background, return at once            │
+│ zmx wait <name>            Block until done, returns the exit code          │
+│ zmx tail <name>            Follow output live                               │
+│ zmx history <name> | tail  Read scrollback                                  │
+│ zmx send <name> <text>     Type into the session (append \r to run)         │
 │                                                                             │
 │ GOTCHA: zmx quotes every argument, so 'a; b' arrives as ONE word (127):     │
 │   zmx run job -d zsh -c 'a; b'     or     echo 'a; b' | zmx run job         │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ KUBERNETES - GET RESOURCES                                                  │
+│ GIT                                                                         │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ k               kubectl                  kga             kubectl get all    │
-│ kgp             get pods                 kgpa            get pods --all-ns  │
-│ kgs             get services             kgc             get contexts       │
-│ kgd             get deployments          kcc             current context    │
-│ kgn             get nodes                                                   │
+│ gs / gd                    git status / diff                                │
+│ ga / gc / gp               git add / commit / push                          │
+│ gl                         git log --oneline --graph --decorate             │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ KUBERNETES - OPERATIONS                                                     │
+│ KUBERNETES                                                                  │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ kl <pod>        logs                     kap <file>      apply -f           │
-│ klf <pod>       logs -f (follow)         kdel <res>      delete resource    │
-│ kdp <pod>       describe pod             kdelp <pod>     delete pod         │
-│ kds <svc>       describe service                                            │
-│ kdd <dep>       describe deployment                                         │
+│ k                          kubectl (Tab completion works)                   │
+│ kgp                        kubectl get pods                                 │
+│ kl <pod>                   kubectl logs  (add -f to follow)                 │
+│ kex <pod> -- sh            kubectl exec -it                                 │
+│ k9s                        The rest:  :pods :deploy :svc :ns :ctx  / filter │
+│                            l logs  s shell  d describe  e edit  ? help      │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ KUBERNETES - HELPER FUNCTIONS                                               │
+│ WHERE THINGS LIVE                                                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ kshell <pod> [container]     Open shell in pod                              │
-│ kbash <pod> [container]      Open bash in pod                               │
-│ kgpw <pattern>               Find pods by name                              │
-│ kevents                      Get events sorted by time                      │
-│ kpf <pod> <port>             Port forward to pod                            │
-│ ktop [pods|nodes]            Resource usage                                 │
-│ krestart <deployment>        Restart deployment                             │
+│ ~/.zshrc                   Aliases, functions, key bindings                 │
+│ ~/.zshrc.d/*.zsh           This machine only, not tracked                   │
+│ ~/.config/ghostty/config   Terminal: theme, keys, notifications             │
+│ ~/.config/starship.toml    Prompt                                           │
+│ ~/.config/nvim/            Neovim (LazyVim): press Space for the key list   │
+│ ~/.inputrc                 Line editing keys for bash                       │
 └─────────────────────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ KIND - LOCAL KUBERNETES                                                     │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ kind-new <name>              Create cluster                                 │
-│ kind-multi [name]            Create multi-node (1 cp + 2 workers)           │
-│ kind-with-ports [name]       Create with ports (80, 443, 30000)             │
-│ kind-list                    List all clusters                              │
-│ kind-clean                   Delete ALL clusters                            │
-│ kind-use <name>              Switch to cluster context                      │
-│ kind-img <image> [cluster]   Load Docker image into cluster                 │
-│ kind-nodes [cluster]         Show nodes in cluster                          │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ K9S - TERMINAL UI                                                           │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ k9s                          Launch k9s                                     │
-│ k9s -n <namespace>           Launch in namespace                            │
-│                                                                             │
-│ Inside k9s:                                                                 │
-│   :          Command mode        0          Show pods                       │
-│   /          Filter              d          Describe                        │
-│   ?          Help                l          Logs                            │
-│   Ctrl+a     All namespaces      Ctrl+d     Delete                          │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ COMMON WORKFLOWS                                                            │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ LEARNING K8S:                                                               │
-│   kind-new learning          # Create cluster                               │
-│   k create deployment nginx --image=nginx                                   │
-│   k expose deployment nginx --port=80                                       │
-│   kgp                        # Check pods                                   │
-│   k9s                        # Visual exploration                           │
-│   kind delete cluster --name learning                                       │
-│                                                                             │
-│ TESTING MANIFESTS:                                                          │
-│   kind-new test              # Create test cluster                          │
-│   k apply -f deployment.yaml                                                │
-│   kgp                        # Check status                                 │
-│   klf <pod>                  # Check logs                                   │
-│   kshell <pod>               # Debug inside pod                             │
-│   kind delete cluster --name test                                           │
-│                                                                             │
-│ CUSTOM IMAGES:                                                              │
-│   docker build -t my-app:v1 .                                               │
-│   kind-new dev                                                              │
-│   kind-img my-app:v1 dev                                                    │
-│   k create deployment my-app --image=my-app:v1                              │
-│   kgp                                                                       │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ USEFUL ONE-LINERS                                                           │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ k get pods --sort-by='.status.containerStatuses[0].restartCount'            │
-│ k top pods --sort-by=cpu                                                    │
-│ k top pods --sort-by=memory                                                 │
-│ k get events --field-selector involvedObject.name=<pod>                     │
-│ k get pods -o wide           # Show which node                              │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ TROUBLESHOOTING                                                             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ source ~/.zshrc              Reload zsh config                              │
-│ kcc                          Show current context                           │
-│ kgc                          List all contexts                              │
-│ docker ps                    Check running containers                       │
-│ kind get clusters            List kind clusters                             │
-│ k cluster-info               Check cluster connection                       │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ FILE LOCATIONS                                                              │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ ~/.zshrc                                 Main zsh config                    │
-│ ~/.zshrc.d/*.zsh                         Local zsh config, untracked        │
-│ ~/.inputrc                               Readline keys for bash             │
-│ ~/.config/ghostty/config                 Terminal config + key notes        │
-│ ~/.config/starship.toml                  Starship prompt config             │
-│ ~/.config/kind/*.yaml                    kind cluster templates             │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ DOCUMENTATION                                                               │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ README.md in the dotfiles repo           Overview, install, keys            │
-│ cat ~/.config/nvim/README.md             Neovim / LazyVim notes             │
-│ cat ~/.config/kind/README.md             kind examples                      │
-│                                                                             │
-│ External:                                                                   │
-│   https://kubernetes.io/docs/reference/kubectl/cheatsheet/                  │
-│   https://kind.sigs.k8s.io/                                                 │
-│   https://k9scli.io/                                                        │
-│   https://starship.rs/                                                      │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-╔═════════════════════════════════════════════════════════════════════════════╗
-║ TIP: The Starship prompt shows git branch, k8s context, [zmx session]       ║
-║      Tab completion works for kubectl and the k alias                       ║
-║      Test in kind before production                                         ║
-╚═════════════════════════════════════════════════════════════════════════════╝
-
-Last Updated: 2026-11-08
+Last updated: 2026-11-09

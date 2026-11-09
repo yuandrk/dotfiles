@@ -15,7 +15,7 @@ pointing back here. **Editing the file in `$HOME` edits the repo.**
 | Machine | MacBook Air M3 (Apple Silicon, `arm64`) |
 | OS | macOS 26 |
 | Shell | `zsh` (`/bin/zsh`) — the login shell |
-| Terminal | Ghostty 1.3.1, `TERM=xterm-ghostty` |
+| Terminal | Ghostty 1.4, `TERM=xterm-ghostty`, theme TokyoNight Moon (same as Neovim) |
 | Prompt | Starship (`starship/starship.toml`) |
 | Sessions | zmx (`zmx attach <name>`, detach `ctrl+\`), **not** auto-started; prompt shows `[name]` |
 | Splits/tabs | Ghostty's own (`cmd+d`, `cmd+shift+d`, `cmd+t`) — no tmux |
@@ -34,15 +34,14 @@ you find in old docs or git history.
 ## Layout
 
 ```
-zsh/zshrc          -> ~/.zshrc          aliases, functions, k8s + kind helpers
+zsh/zshrc          -> ~/.zshrc          aliases, functions, key bindings
 zsh/zprofile       -> ~/.zprofile       login shell: brew shellenv, PATH
-bash/              -> ~/.bashrc etc.    kept for Linux / bash sessions only
+bash/              -> ~/.bashrc etc.    short version of zshrc, for Linux / bash sessions
 bash/inputrc       -> ~/.inputrc        readline keys (Home/End/Delete, word jump)
 starship/          -> ~/.config/starship.toml
 ghostty/           -> ~/.config/ghostty
 nvim/              -> ~/.config/nvim    LazyVim; lazy-lock.json is the plugin lockfile
-kind/              -> ~/.config/kind    cluster manifests
-claude/            -> ~/.claude/*       settings.json + statusline-command.sh (files only)
+claude/            -> ~/.claude/        statusline-command.sh (linked); settings.example.json (copied once)
 docs/setup/        -> ~/docs/setup      CHEATSHEET.txt (all aliases + keys on one page)
 Brewfile                                everything installed via `brew bundle`
 install.sh                              symlinks + tool install
@@ -56,9 +55,11 @@ to `~/.zshrc` are writing into a tracked, public file — move those lines out. 
 `zprofile` already puts `~/.local/bin` and `~/bin` on PATH with a duplicate guard, so a
 PATH export for those is never needed.
 
-**Only two files under `~/.claude` are tracked**: `settings.json` and
-`statusline-command.sh`. Everything else there is credentials or session state and is
-covered by `.gitignore`. Never symlink or commit the whole `~/.claude` directory.
+**Only `statusline-command.sh` is symlinked into `~/.claude`.** `~/.claude/settings.json`
+is a real file, seeded once from `claude/settings.example.json`: Claude Code writes
+private, machine-local settings into it, so it must not be a symlink into this public
+repo. Everything else there is credentials or session state and is covered by
+`.gitignore`. Never symlink or commit the whole `~/.claude` directory.
 
 **This repo is public.** No secrets, tokens, kubeconfigs, or real hostnames.
 
@@ -77,6 +78,9 @@ truly must.
 
 ## Conventions
 
+- Keep it small: set only what differs from a tool's defaults, and don't add an alias or
+  helper until it has actually been typed a few times. LazyVim loads
+  `nvim/lua/config/{options,keymaps,autocmds}.lua` itself — never `require` them.
 - Shell config uses banner comments (`# ===== SECTION =====`) — match that style.
 - `install.sh` uses the `create_symlink` / `backup_file` / `print_*` helpers. Reuse them
   rather than calling `ln -s` directly.

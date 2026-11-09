@@ -8,15 +8,14 @@ Everything in `$HOME` is a symlink back into this repo, so editing `~/.zshrc` ed
 
 | Path | Linked to | What it does |
 |---|---|---|
-| `zsh/zshrc` | `~/.zshrc` | aliases, functions, key bindings, k8s + kind helpers |
+| `zsh/zshrc` | `~/.zshrc` | aliases, functions, key bindings |
 | `zsh/zprofile` | `~/.zprofile` | login shell: Homebrew env, PATH |
-| `bash/bashrc`, `bash/bash_profile` | `~/.bashrc`, `~/.bash_profile` | bash on Linux / `bash` sessions |
+| `bash/bashrc`, `bash/bash_profile` | `~/.bashrc`, `~/.bash_profile` | short version of the zsh config, for Linux servers |
 | `bash/inputrc` | `~/.inputrc` | readline keys for bash (Home/End/Delete, word jump) |
-| `ghostty/` | `~/.config/ghostty` | terminal: font, colours, key notes |
-| `starship/starship.toml` | `~/.config/starship.toml` | prompt: git, k8s context, `[zmx session]` |
+| `ghostty/` | `~/.config/ghostty` | terminal: theme, keys, notifications |
+| `starship/starship.toml` | `~/.config/starship.toml` | prompt: `[zmx session]`, git, language, k8s context |
 | `nvim/` | `~/.config/nvim` | LazyVim; notes in [`nvim/README.md`](nvim/README.md) |
-| `kind/` | `~/.config/kind` | kind cluster templates; see [`kind/README.md`](kind/README.md) |
-| `claude/` | `~/.claude/settings.json`, `statusline-command.sh` | Claude Code settings + status line (files only) |
+| `claude/` | `~/.claude/statusline-command.sh` | Claude Code status line; `settings.example.json` is copied once, not linked |
 | `docs/setup/` | `~/docs/setup` | [`CHEATSHEET.txt`](docs/setup/CHEATSHEET.txt) — every alias and key on one page |
 | `Brewfile` | | every tool, installed with `brew bundle` |
 | `install.sh` | | symlinks + tool install |
@@ -34,7 +33,8 @@ cd ~/dotfiles
 
 - **macOS**: installs Homebrew if missing, then everything in the `Brewfile`.
   Docker Desktop is installed by hand (`brew install --cask docker-desktop`).
-- **Linux**: downloads the tools with curl into `~/.local/bin`; the bash config is used.
+- **Linux** (x86_64 or arm64): downloads Starship, Neovim, zmx, kubectl and k9s into
+  `~/.local/bin`; the bash config is used.
 - Existing real files are backed up as `*.backup.<timestamp>`; existing symlinks are replaced.
 - **Update**: `git pull && ./install.sh --minimal`, then open a new tab.
 - **Machine-specific config** goes in `~/.zshrc.d/*.zsh` (sourced last, not tracked) —
@@ -61,16 +61,28 @@ Line editing works the same as bash on a stock Linux box — in zsh (`KEY BINDIN
 `Ctrl-←` / `Ctrl-→` are bound for word jumps too, but macOS gives them to Mission Control
 unless *Keyboard → Shortcuts → Mission Control → Move left/right a space* is turned off.
 
-Ghostty handles tabs and splits itself — there is no tmux:
+### Ghostty
+
+Ghostty does tabs and splits itself — there is no tmux. It uses the same colour scheme
+as Neovim (TokyoNight Moon). `Cmd-Shift-P` opens a palette with every action.
 
 | Key | Action |
 |---|---|
-| `Cmd-T` / `Cmd-W` | new tab / close |
-| `Cmd-1` … `Cmd-9` | go to tab |
+| `Cmd-T` / `Cmd-W` | new tab / close; `Cmd-1` … `Cmd-8` go to tab |
+| `Cmd-Shift-R` | name the tab |
 | `Cmd-D` / `Cmd-Shift-D` | split right / down |
-| `Cmd-Alt-arrows` | move between splits (`Cmd-Ctrl-arrows` resizes) |
+| `Cmd-Alt-arrows` | move between splits (`Cmd-Ctrl-arrows` resizes, `Cmd-Ctrl-=` equalizes) |
+| `Cmd-Shift-Enter` | zoom the current split to the whole tab, and back |
+| `Cmd-↑` / `Cmd-↓` | jump to the previous / next prompt |
+| `Cmd-F` | search the scrollback (`Cmd-G` next match) |
+| `Cmd-Shift-S` | open the whole scrollback as a text file |
 | `Cmd-K` | clear screen |
 | `` Cmd-` `` | drop-down terminal, from any app |
+| `Cmd-Shift-,` | reload the config |
+
+Selecting text copies it, and `Cmd`-click opens a link. A command that ran longer than
+10 seconds sends a notification when it finishes, if you were looking elsewhere.
+Windows, tabs and splits come back after a restart.
 
 ## Sessions: zmx
 
@@ -99,24 +111,26 @@ Never `zmx attach` from a script. Inside a session use `zmx run`, or
 ll / la                # ls -lh / ls -lhA
 gs ga gc gp gl gd      # git status / add / commit / push / log --graph / diff
 mkcd <dir>             # mkdir + cd
-extract <file>         # unpack any archive
+extract <file>         # unpack tar, gz, bz2, zip
 ff / ffd <pattern>     # find files / directories by name
-k                      # kubectl — plus ~20 k* aliases, k* helpers and kind-* helpers
+k / kgp / kl / kex     # kubectl / get pods / logs / exec -it — k9s for everything else
 ```
 
-The full list lives in the cheatsheet: `cat ~/docs/setup/CHEATSHEET.txt`.
+That is all of them, on purpose. The same on one page, with the keys:
+`cat ~/docs/setup/CHEATSHEET.txt`.
 
 ## Neovim
 
 LazyVim with a few extras (see [`nvim/README.md`](nvim/README.md)). Press `Space` and wait:
 which-key lists every mapping, and `Space s k` searches them. `:Lazy` manages plugins,
 `:LazyExtras` adds language support, `:Mason` installs LSPs and formatters.
-Local additions: `jk` leaves insert mode, `Ctrl-S` saves.
+Local additions: `jk` leaves insert mode, and trailing whitespace is stripped on save.
 
 ## Security
 
 This repo is public: no secrets, tokens, kubeconfigs or real hostnames. `.gitignore`
-covers the usual suspects, and only two files under `~/.claude` are tracked. Check
+covers the usual suspects, and `~/.claude/settings.json` is deliberately a real file
+rather than a symlink into this repo (Claude Code writes private settings there). Check
 `git diff --cached` before every commit.
 
 ## License
